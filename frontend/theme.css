@@ -1,0 +1,253 @@
+/* Explicitly bind Material Symbols so ligature names (e.g. "notifications")
+   never render as plain text if a page loads before other styles settle. */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined" !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none !important;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  flex-shrink: 0;
+}
+
+/* Keep the shared header and page content aligned across every section.
+   The sticky header is in normal document flow, so main must not add another
+   64px of top offset on top of it. */
+body>div.pl-64 {
+  min-height: 100vh;
+  width: calc(100% - 16rem);
+}
+
+body>div.pl-64>header {
+  min-height: 4rem;
+  height: 4rem;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+body>div.pl-64>main {
+  padding-top: 2rem !important;
+  box-sizing: border-box;
+}
+
+/* Shared NormCheck AI polish: stable sidebar alignment, transitions and theme. */
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  transition: none !important;
+}
+
+/* All primary sidebar rows use one layout regardless of which page marks itself active. */
+a[data-path] {
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+a[data-path]>.material-symbols-outlined {
+  width: 20px;
+  min-width: 20px;
+  flex: 0 0 20px;
+  text-align: center;
+  line-height: 1;
+}
+
+a[data-path]>div:first-child:has(> .material-symbols-outlined) {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+a[data-path]>span[class*="rounded-full"] {
+  margin-left: auto;
+}
+
+a[data-path]>div:first-child+span {
+  margin-left: auto;
+}
+
+a[data-path] {
+  transition: none !important;
+  transform: none !important;
+}
+
+a[data-path]:hover {
+  transform: none !important;
+}
+
+/* Stable page changes: avoid blank/fading content while local HTML pages load. */
+body main,
+body.nc-page-leaving main {
+  animation: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+  pointer-events: auto;
+}
+
+button,
+input,
+select,
+textarea {
+  transition: background-color .12s ease, color .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+
+button:active {
+  transform: none !important;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #8b72ff;
+  outline-offset: 2px;
+}
+
+/* Dark theme is applied consistently on all pages, including the Tailwind-generated utility surfaces. */
+body.dark-theme {
+  color-scheme: dark;
+  background: #11111a !important;
+  color: #eeeaf8 !important;
+}
+
+body.dark-theme,
+body.dark-theme main,
+body.dark-theme .bg-surface-bright,
+body.dark-theme .bg-surface,
+body.dark-theme .bg-background {
+  background-color: #151520 !important;
+  color: #eeeaf8 !important;
+}
+
+body.dark-theme aside,
+body.dark-theme header,
+body.dark-theme .bg-surface-container-lowest,
+body.dark-theme .bg-white,
+body.dark-theme [class*="bg-[#FFFFFF"],
+body.dark-theme [class*="bg-[#ffffff"] {
+  background-color: #1d1c2a !important;
+}
+
+body.dark-theme .bg-surface-container-low,
+body.dark-theme [class*="bg-[#F8F7FC"],
+body.dark-theme [class*="bg-[#F9F7FE"],
+body.dark-theme [class*="bg-[#FCF8FF"],
+body.dark-theme [class*="bg-[#F6F1FF"],
+body.dark-theme [class*="bg-[#F5F3FF"] {
+  background-color: #252337 !important;
+}
+
+body.dark-theme .bg-surface-container,
+body.dark-theme .bg-surface-container-high,
+body.dark-theme .bg-surface-container-highest,
+body.dark-theme [class*="bg-[#E7E5EE"],
+body.dark-theme [class*="bg-[#E4DFFD"] {
+  background-color: #302d43 !important;
+}
+
+body.dark-theme [class*="text-on-surface"],
+body.dark-theme [class*="text-[#242139"],
+body.dark-theme [class*="text-[#1B192F"],
+body.dark-theme [class*="text-[#1b192f"] {
+  color: #eeeaf8 !important;
+}
+
+body.dark-theme [class*="text-on-surface-variant"],
+body.dark-theme [class*="text-[#645F7A"],
+body.dark-theme [class*="text-[#484556"],
+body.dark-theme [class*="text-[#797588"] {
+  color: #c0bad5 !important;
+}
+
+body.dark-theme [class*="border-outline"],
+body.dark-theme [class*="border-[#E7E5EE"],
+body.dark-theme [class*="border-[#C9C4D9"],
+body.dark-theme [class*="border-[#e7e5ee"] {
+  border-color: #39364d !important;
+}
+
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select {
+  background-color: #211f30 !important;
+  color: #eeeaf8 !important;
+  border-color: #45405d !important;
+}
+
+body.dark-theme table th {
+  background-color: #252337 !important;
+  color: #eeeaf8 !important;
+}
+
+body.dark-theme table td {
+  border-color: #39364d !important;
+}
+
+body.dark-theme a[data-path] {
+  color: #c0bad5 !important;
+}
+
+body.dark-theme a[data-path][aria-current="page"] {
+  background-color: #30294f !important;
+  color: #b7a6ff !important;
+  box-shadow: inset 3px 0 #8b72ff;
+}
+
+body.dark-theme a[data-path] .material-symbols-outlined {
+  color: inherit !important;
+}
+
+body.dark-theme #section-appearance .nc-theme-toggle {
+  background: #8b72ff !important;
+  color: #fff !important;
+}
+
+body.dark-theme .shadow-sm,
+body.dark-theme .shadow-md,
+body.dark-theme .shadow-lg {
+  box-shadow: 0 5px 18px #0003 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Keep the Review Queue count readable in dark mode. */
+body.dark-theme a[data-path="review-queue"] span.rounded-full {
+  background-color: #4b3b7c !important;
+  color: #ffffff !important;
+  border: 1px solid #8b72ff !important;
+  opacity: 1 !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+
+body.dark-theme a[data-path="review-queue"] span.rounded-full * {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}

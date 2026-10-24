@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta content="web_dashboard" name="shell-type" />
+  <title>NormCheck AI — Overview</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <style>
+    @layer base {
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #FFFFFF;
+        color: #242139;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      body {
+        overscroll-behavior: none;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+  <link href="theme.css" rel="stylesheet" />
+</head>
+
+<body class="bg-white antialiased min-h-screen flex text-[#242139]" style="min-height:100vh">
+  <!-- 2. SIDEBAR (Slim, clean, minimal, consistently spaced) -->
+  <aside class="fixed left-0 top-0 h-full w-64 bg-white border-r border-[#E7E5EE] z-50 flex flex-col justify-between">
+    <div class="flex flex-col">
+      <!-- Logo -->
+      <div class="h-16 px-6 border-b border-[#E7E5EE] flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-[#6D4AFF] flex items-center justify-center text-white shadow-sm">
+          <span class="material-symbols-outlined text-[19px]">verified</span>
+        </div>
+        <div class="flex items-center gap-1.5 font-semibold text-[17px] tracking-tight text-[#242139]">
+          <span class="">NormCheck</span>
+          <span class="text-[#6D4AFF]">AI</span>
+        </div>
+      </div>
+      <!-- Main Navigation -->
+      <div class="px-3 py-4">
+        <nav class="flex flex-col gap-1" data-active-classes="bg-[#F5F3FF] text-[#6D4AFF] font-medium">
+          <!-- Overview -->
+          <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="overview" href="index.html"><span aria-hidden="true"
+              class="material-symbols-outlined text-[20px]">dashboard</span>
+            <span class="">Overview</span>
+          </a>
+          <!-- Content Checker -->
+          <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="content-checker" href="checker.html"><span aria-hidden="true"
+              class="material-symbols-outlined text-[20px]">fact_check</span>
+            <span class="">Content Checker</span>
+          </a>
+          <!-- Review Queue -->
+          <a class="flex items-center justify-between px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="review-queue" href="review.html" style="gap:12px"><span aria-hidden="true"
+              class="material-symbols-outlined text-[20px]">rate_review</span>
+            <span class="">Review Queue</span>
+            <span class="px-2 py-0.5 rounded-full bg-[#F5F3FF] text-[#6D4AFF] text-[12px] font-semibold">14</span>
+          </a>
+          <!-- Brand Knowledge -->
+          <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="brand-knowledge" href="knowledge.html"><span aria-hidden="true"
+              class="material-symbols-outlined text-[20px]">menu_book</span>
+            <span class="">Brand Knowledge</span>
+          </a>
+          <!-- Insights -->
+          <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="insights" href="insights.html"><span aria-hidden="true"
+              class="material-symbols-outlined text-[20px]">analytics</span>
+            <span class="">Insights</span>
+          </a>
+          <!-- Activity History -->
+          <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="activity-history" href="activity.html"><span aria-hidden="true"
+              class="material-symbols-outlined text-[20px]">history</span>
+            <span class="">Activity History</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+    <!-- Bottom Section: Settings & User Profile -->
+    <div class="p-3 border-t border-[#E7E5EE] flex flex-col gap-2">
+      <a class="flex items-center gap-3 px-3.5 py-2 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+        data-path="settings" href="settings.html">
+        <span class="">Settings</span>
+      </a>
+      <div class="flex items-center gap-3 px-3 py-2 rounded-[10px] bg-[#F8F7FC] border border-[#E7E5EE]">
+        <div
+          class="w-8 h-8 rounded-full bg-[#6D4AFF] text-white flex items-center justify-center font-medium text-xs shrink-0">
+          CL
+        </div>
+        <div class="flex flex-col min-w-0 flex-1">
+          <span class="text-[13px] font-medium text-[#242139] truncate">Compliance Lead</span>
+          <span class="text-[11px] text-[#9894A8] truncate">governance@acme.corp</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <!-- MAIN WRAPPER -->
+  <div class="pl-64 flex flex-col flex-1 min-h-screen bg-white">
+    <!-- 3. TOP HEADER (Simplified, uncluttered) -->
+    <header class="h-16 px-8 border-b border-[#E7E5EE] bg-white sticky top-0 z-40 flex items-center justify-between">
+      <!-- Left: Workspace Selector -->
+      <div class="flex items-center gap-4">
+        <div
+          class="flex items-center gap-2 px-3 py-1.5 rounded-[10px] border border-[#E7E5EE] hover:border-[#645F7A]/40 cursor-pointer bg-white transition-colors text-[13px] text-[#242139]">
+          <span class="material-symbols-outlined text-[17px] text-[#645F7A]">domain</span>
+          <span class="font-medium">Acme Global Brand</span>
+          <span class="material-symbols-outlined text-[16px] text-[#9894A8]">expand_more</span>
+        </div>
+      </div>
+      <!-- Right: Notification bell + New Content Check + User profile -->
+      <div class="flex items-center gap-3">
+        <button aria-label="Notifications"
+          class="relative p-2 rounded-lg text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] transition-colors"
+          type="button">
+          <span class="material-symbols-outlined text-[20px]">notifications</span>
+          <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#6D4AFF]"></span>
+        </button>
+        <button
+          class="flex items-center gap-1.5 px-4 py-2 rounded-[10px] bg-[#6D4AFF] hover:bg-[#5835E5] text-white text-[13px] font-medium shadow-sm transition-all"
+          type="button">
+          <span class="material-symbols-outlined text-[17px]">add</span>
+          <span class="">New Content Check</span>
+        </button>
+        <div class="h-6 w-[1px] bg-[#E7E5EE] mx-1"></div>
+        <div class="flex items-center gap-2.5 pl-1 cursor-pointer">
+          <div
+            class="w-8 h-8 rounded-full bg-[#6D4AFF] text-white flex items-center justify-center font-medium text-xs shrink-0">
+            CL
+          </div>
+          <div class="hidden md:flex flex-col text-left leading-tight">
+            <span class="text-[13px] font-medium text-[#242139]">Compliance Lead</span>
+            <span class="text-[11px] text-[#9894A8]">Acme Corp</span>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- 4. MAIN CONTENT AREA (Spacious, easy to scan, minimal) -->
+    <main class="flex-1 px-8 py-8 max-w-[1400px] w-full mx-auto flex flex-col gap-8">
+      <!-- Welcome / Header Section -->
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center gap-2">
+            <h1 class="text-[26px] font-bold text-[#242139] tracking-tight">Keep your brand consistent.</h1>
+            <span class="px-2 py-0.5 rounded-full bg-[#F5F3FF] text-[#6D4AFF] text-[11px] font-medium">Demo data</span>
+          </div>
+          <p class="text-[14px] text-[#645F7A]">
+            Catch policy violations and review marketing content before it goes live.
+          </p>
+        </div>
+      </div>
+      <!-- 3 Small Horizontal Metric Cards (Simple 3-column grid) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <!-- Metric 1: Total Checks -->
+        <div class="p-5 rounded-[12px] bg-white border border-[#E7E5EE] flex items-center justify-between">
+          <div class="flex flex-col gap-1">
+            <span class="text-[13px] font-medium text-[#645F7A]">Total Checks</span>
+            <div class="flex items-baseline gap-2">
+              <span class="text-[28px] font-bold text-[#242139] tracking-tight">142</span>
+              <span class="text-[12px] font-medium text-[#18865B] flex items-center gap-0.5">
+                <span class="material-symbols-outlined text-[13px]">trending_up</span>
+                +18%
+              </span>
+            </div>
+            <span class="text-[12px] font-medium text-[#645F7A]">Past 30 days</span>
+          </div>
+          <div
+            class="w-11 h-11 rounded-[10px] bg-[#F8F7FC] border border-[#E7E5EE] flex items-center justify-center text-[#645F7A]">
+            <span class="material-symbols-outlined text-[22px]">policy</span>
+          </div>
+        </div>
+        <!-- Metric 2: High-Severity Issues -->
+        <div class="p-5 rounded-[12px] bg-white border border-[#E7E5EE] flex items-center justify-between">
+          <div class="flex flex-col gap-1">
+            <span class="text-[13px] font-medium text-[#645F7A]">High-Severity Issues</span>
+            <div class="flex items-baseline gap-2">
+              <span class="text-[28px] font-bold text-[#DC4545] tracking-tight">6</span>
+              <span class="px-2 py-0.5 rounded-full bg-[#FEE2E2] text-[#DC4545] text-[11px] font-medium">
+                Sign-off required
+              </span>
+            </div>
+            <span class="text-[12px] font-medium text-[#645F7A]">Needs immediate resolution</span>
+          </div>
+          <div
+            class="w-11 h-11 rounded-[10px] bg-[#FEE2E2]/50 border border-[#FCA5A5]/40 flex items-center justify-center text-[#DC4545]">
+            <span class="material-symbols-outlined text-[22px]">gavel</span>
+          </div>
+        </div>
+        <!-- Metric 3: Pending Reviews -->
+        <div class="p-5 rounded-[12px] bg-white border border-[#E7E5EE] flex items-center justify-between">
+          <div class="flex flex-col gap-1">
+            <span class="text-[13px] font-medium text-[#645F7A]">Pending Reviews</span>
+            <div class="flex items-baseline gap-2">
+              <span class="text-[28px] font-bold text-[#242139] tracking-tight">11</span>
+              <span
+                class="px-2 py-0.5 rounded-full bg-[#F8F7FC] text-[#645F7A] text-[11px] font-medium border border-[#E7E5EE]">
+                In triage queue
+              </span>
+            </div>
+            <span class="text-[12px] font-medium text-[#645F7A]">Avg. turnaround 3.4 hrs</span>
+          </div>
+          <div
+            class="w-11 h-11 rounded-[10px] bg-[#F8F7FC] border border-[#E7E5EE] flex items-center justify-center text-[#645F7A]">
+            <span class="material-symbols-outlined text-[22px]">pending_actions</span>
+          </div>
+        </div>
+      </div>
+      <!-- Recent Content Checks Table (Full-width, clean, readable, single primary table) -->
+      <div class="bg-white rounded-[12px] border border-[#E7E5EE] overflow-hidden">
+        <!-- Table Header & Action -->
+        <div class="px-6 py-4 border-b border-[#E7E5EE] flex items-center justify-between bg-white">
+          <div class="flex items-center gap-2.5">
+            <h2 class="text-[16px] font-semibold text-[#242139] tracking-tight">Recent Content Checks</h2>
+            <span class="text-[12px] text-[#9894A8] font-normal">• 5 most recent</span>
+          </div>
+          <a class="text-[13px] font-medium text-[#6D4AFF] hover:text-[#5835E5] flex items-center gap-1 transition-colors"
+            href="#">
+            <span class="">View all</span>
+            <span class="material-symbols-outlined text-[15px]">arrow_forward</span>
+          </a>
+        </div>
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-[#F8F7FC] text-[#242139] text-[12px] font-semibold border-b border-[#E7E5EE]">
+                <th class="py-3 px-6" scope="col">Content Title</th>
+                <th class="py-3 px-6" scope="col">Content Type</th>
+                <th class="py-3 px-6" scope="col">Issues Count</th>
+                <th class="py-3 px-6" scope="col">Highest Severity</th>
+                <th class="py-3 px-6" scope="col">Review Status</th>
+                <th class="py-3 px-6 text-right" scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#E7E5EE] text-[13px] text-[#242139]">
+              <!-- Row 1 -->
+              <tr class="hover:bg-[#F8F7FC]/70 transition-colors">
+                <td class="py-4 px-6 font-medium text-[#242139] flex items-center gap-3">
+                  <span class="material-symbols-outlined text-[18px] text-[#645F7A]">article</span>
+                  <span class="truncate max-w-xs">Q4 Product Launch Press Release</span>
+                </td>
+                <td class="py-4 px-6 text-[#645F7A]">Press Release</td>
+                <td class="py-4 px-6 font-mono text-[13px] text-[#645F7A]">4 findings</td>
+                <td class="py-4 px-6">
+                  <span
+                    class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FEE2E2] text-[#DC4545] text-[12px] font-medium">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#DC4545]"></span>
+                    High
+                  </span>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="text-[#645F7A] font-medium">In Review</span>
+                </td>
+                <td class="py-4 px-6 text-right">
+                  <button
+                    class="px-3 py-1.5 rounded-lg bg-[#6D4AFF] hover:bg-[#5835E5] text-white text-[12px] font-medium transition-colors"
+                    type="button">
+                    Review
+                  </button>
+                </td>
+              </tr>
+              <!-- Row 2 -->
+              <tr class="hover:bg-[#F8F7FC]/70 transition-colors">
+                <td class="py-4 px-6 font-medium text-[#242139] flex items-center gap-3">
+                  <span class="material-symbols-outlined text-[18px] text-[#645F7A]">web</span>
+                  <span class="truncate max-w-xs">SaaS Pricing Page Overhaul</span>
+                </td>
+                <td class="py-4 px-6 text-[#645F7A]">Web Landing</td>
+                <td class="py-4 px-6 font-mono text-[13px] text-[#645F7A]">0 findings</td>
+                <td class="py-4 px-6">
+                  <span
+                    class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#DCFCE7] text-[#18865B] text-[12px] font-medium">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#18865B]"></span>
+                    Passed
+                  </span>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="text-[#18865B] font-medium">Approved</span>
+                </td>
+                <td class="py-4 px-6 text-right">
+                  <button
+                    class="px-3 py-1.5 rounded-lg border border-[#E7E5EE] hover:bg-[#F8F7FC] text-[#242139] text-[12px] font-medium transition-colors"
+                    type="button">
+                    View
+                  </button>
+                </td>
+              </tr>
+              <!-- Row 3 -->
+              <tr class="hover:bg-[#F8F7FC]/70 transition-colors">
+                <td class="py-4 px-6 font-medium text-[#242139] flex items-center gap-3">
+                  <span class="material-symbols-outlined text-[18px] text-[#645F7A]">picture_as_pdf</span>
+                  <span class="truncate max-w-xs">Enterprise Security Whitepaper</span>
+                </td>
+                <td class="py-4 px-6 text-[#645F7A]">Whitepaper / Doc</td>
+                <td class="py-4 px-6 font-mono text-[13px] text-[#645F7A]">3 findings</td>
+                <td class="py-4 px-6">
+                  <span
+                    class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FEF3C7] text-[#D97706] text-[12px] font-medium">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#D97706]"></span>
+                    Medium
+                  </span>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="text-[#645F7A] font-medium">In Review</span>
+                </td>
+                <td class="py-4 px-6 text-right"><button
+                    class="px-3 py-1.5 rounded-lg bg-[#6D4AFF] hover:bg-[#5835E5] text-white text-[12px] font-medium transition-colors"
+                    type="button">Review</button></td>
+              </tr>
+              <!-- Row 4 -->
+              <tr class="hover:bg-[#F8F7FC]/70 transition-colors">
+                <td class="py-4 px-6 font-medium text-[#242139] flex items-center gap-3">
+                  <span class="material-symbols-outlined text-[18px] text-[#645F7A]">campaign</span>
+                  <span class="truncate max-w-xs">Black Friday Ad Copy Variations</span>
+                </td>
+                <td class="py-4 px-6 text-[#645F7A]">Social Ad</td>
+                <td class="py-4 px-6 font-mono text-[13px] text-[#DC4545]">7 findings</td>
+                <td class="py-4 px-6">
+                  <span
+                    class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FEE2E2] text-[#DC4545] text-[12px] font-medium">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#DC4545]"></span>
+                    High
+                  </span>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="text-[#DC4545] font-medium">Changes Req.</span>
+                </td>
+                <td class="py-4 px-6 text-right">
+                  <button
+                    class="px-3 py-1.5 rounded-lg bg-[#6D4AFF] hover:bg-[#5835E5] text-white text-[12px] font-medium transition-colors"
+                    type="button">
+                    Review
+                  </button>
+                </td>
+              </tr>
+              <!-- Row 5 -->
+              <tr class="hover:bg-[#F8F7FC]/70 transition-colors">
+                <td class="py-4 px-6 font-medium text-[#242139] flex items-center gap-3">
+                  <span class="material-symbols-outlined text-[18px] text-[#645F7A]">mail</span>
+                  <span class="truncate max-w-xs">Partner Ecosystem Email Blast</span>
+                </td>
+                <td class="py-4 px-6 text-[#645F7A]">Email</td>
+                <td class="py-4 px-6 font-mono text-[13px] text-[#645F7A]">1 finding</td>
+                <td class="py-4 px-6">
+                  <span
+                    class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#F1F5F9] text-[#64748B] text-[12px] font-medium">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#64748B]"></span>
+                    Low
+                  </span>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="text-[#18865B] font-medium">Approved</span>
+                </td>
+                <td class="py-4 px-6 text-right">
+                  <button
+                    class="px-3 py-1.5 rounded-lg border border-[#E7E5EE] hover:bg-[#F8F7FC] text-[#242139] text-[12px] font-medium transition-colors"
+                    type="button">
+                    View
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+
+</html>

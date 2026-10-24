@@ -1,0 +1,668 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NormCheck AI — Insights</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="theme.css" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Inter, sans-serif; color: #242139; background: #fff; }
+    .mono { font-family: "JetBrains Mono", monospace; }
+    .muted { color: #77738a; }
+    .panel { border: 1px solid #e7e5ee; border-radius: 14px; background: white; }
+    .nav-link { display:flex; align-items:center; gap:12px; padding:11px 13px; border-radius:10px; color:#645f7a; font-size:14px; text-decoration:none; }
+    .nav-link:hover { background:#f8f7fc; color:#242139; }
+    .nav-link.active { background:#f5f3ff; color:#6d4aff; font-weight:600; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:7px; padding:9px 12px; border:1px solid #e7e5ee; border-radius:9px; background:white; font-size:13px; font-weight:500; cursor:pointer; }
+    .btn:hover { background:#f8f7fc; }
+    .btn-primary { color:white; background:#6d4aff; border-color:#6d4aff; }
+    .btn-primary:hover { background:#5835e5; }
+    .field { min-height:38px; border:1px solid #e7e5ee; border-radius:9px; padding:8px 11px; background:white; color:#242139; font-size:13px; }
+    .field:focus { outline:2px solid #6d4aff33; border-color:#6d4aff; }
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; text-align:left; }
+    th { background:#f6f3ff; color:#645f7a; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; white-space:nowrap; }
+    th, td { padding:14px 17px; border-bottom:1px solid #eeeaf5; vertical-align:middle; }
+    td { font-size:13px; }
+    tbody tr:last-child td { border-bottom:0; }
+    tbody tr:hover { background:#fbfaff; }
+    .pill { display:inline-flex; align-items:center; gap:5px; border-radius:20px; padding:4px 9px; font-size:11px; font-weight:600; white-space:nowrap; }
+    .high { background:#fee2e2; color:#991b1b; }
+    .medium { background:#fef3c7; color:#92400e; }
+    .low { background:#e0f2fe; color:#075985; }
+    .neutral { background:#f0ebff; color:#5b3bc4; }
+    .success { background:#dcfce7; color:#166534; }
+    .empty { padding:32px 16px; text-align:center; color:#77738a; font-size:13px; }
+    .metric { padding:19px; }
+    .metric-value { font-size:28px; font-weight:600; letter-spacing:-.04em; margin-top:8px; }
+    .metric-label { color:#77738a; font-size:12px; }
+    .status-line { font-size:12px; color:#77738a; }
+    .status-line.error { color:#b42318; }
+    .bar-track { width:100%; height:7px; border-radius:10px; background:#eeeaf5; overflow:hidden; }
+    .bar-fill { height:100%; border-radius:10px; background:#6d4aff; }
+    @media(max-width:900px) {
+      aside { display:none !important; }
+      #main-wrapper { margin-left:0 !important; }
+      main { padding:24px 16px !important; }
+      header { padding:0 16px !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="fixed left-0 top-0 h-screen w-64 border-r border-[#E7E5EE] bg-white z-40 flex flex-col justify-between">
+    <div>
+      <div class="h-16 px-6 border-b border-[#E7E5EE] flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-[#6D4AFF] flex items-center justify-center text-white">
+          <span class="material-symbols-outlined">verified</span>
+        </div>
+        <div class="font-semibold text-[17px]">NormCheck <span class="text-[#6D4AFF]">AI</span></div>
+      </div>
+      <nav class="p-3 flex flex-col gap-1">
+        <a class="nav-link" href="index.html"><span class="material-symbols-outlined">dashboard</span>Overview</a>
+        <a class="nav-link" href="checker.html"><span class="material-symbols-outlined">fact_check</span>Content Checker</a>
+        <a class="nav-link" href="review.html"><span class="material-symbols-outlined">rate_review</span>Review Queue</a>
+        <a class="nav-link" href="knowledge.html"><span class="material-symbols-outlined">menu_book</span>Brand Knowledge</a>
+        <a class="nav-link active" href="insights.html"><span class="material-symbols-outlined">analytics</span>Insights</a>
+        <a class="nav-link" href="activity.html"><span class="material-symbols-outlined">history</span>Activity History</a>
+      </nav>
+    </div>
+    <div class="p-4 border-t border-[#E7E5EE]">
+      <a class="nav-link" href="settings.html"><span class="material-symbols-outlined">settings</span>Settings</a>
+      <div class="mt-3 rounded-xl bg-[#F8F7FC] border border-[#E7E5EE] p-3">
+        <div class="text-sm font-medium">Compliance Lead</div>
+        <div class="text-xs muted mt-1">NormCheck workspace</div>
+      </div>
+    </div>
+  </aside>
+
+  <div id="main-wrapper" class="ml-64 min-h-screen">
+    <header class="h-16 sticky top-0 z-30 bg-white border-b border-[#E7E5EE] flex items-center justify-between px-8">
+      <div class="flex items-center gap-2 text-sm">
+        <span class="material-symbols-outlined muted">domain</span>
+        <span class="font-medium">Acme Global Brand</span>
+      </div>
+      <a href="checker.html" class="btn btn-primary no-underline">
+        <span class="material-symbols-outlined text-[18px]">add</span>New Content Check
+      </a>
+    </header>
+
+    <main class="px-8 py-8 max-w-[1500px] mx-auto">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-7">
+        <div>
+          <h1 class="text-3xl font-semibold tracking-tight">Insights &amp; Activity</h1>
+          <p class="muted text-sm mt-2 max-w-2xl">Recurring brand issues and review outcomes calculated from your workspace records.</p>
+          <div id="data-status" class="status-line mt-3" role="status">Loading workspace data…</div>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <input id="search-input" class="field w-56" type="search" placeholder="Search rules or assets…">
+          <select id="date-range" class="field">
+            <option value="7">Last 7 days</option>
+            <option value="30" selected>Last 30 days</option>
+            <option value="90">Last 90 days</option>
+            <option value="all">All time</option>
+          </select>
+          <select id="activity-type" class="field">
+            <option value="all">All activity</option>
+            <option value="review">Review decisions</option>
+            <option value="knowledge">Knowledge updates</option>
+            <option value="check">Checks completed</option>
+          </select>
+          <button id="refresh-btn" class="btn" type="button"><span class="material-symbols-outlined text-[17px]">refresh</span>Refresh</button>
+          <button id="export-btn" class="btn" type="button"><span class="material-symbols-outlined text-[17px]">download</span>Export CSV</button>
+        </div>
+      </div>
+
+      <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+        <div class="panel metric">
+          <div class="metric-label">Checks completed</div>
+          <div id="metric-checks" class="metric-value">—</div>
+          <div class="metric-label mt-2">Within selected period</div>
+        </div>
+        <div class="panel metric">
+          <div class="metric-label">Findings detected</div>
+          <div id="metric-findings" class="metric-value">—</div>
+          <div class="metric-label mt-2">Based on returned check results</div>
+        </div>
+        <div class="panel metric">
+          <div class="metric-label">High-severity findings</div>
+          <div id="metric-high" class="metric-value">—</div>
+          <div class="metric-label mt-2">Severity marked high/critical</div>
+        </div>
+        <div class="panel metric">
+          <div class="metric-label">Open review items</div>
+          <div id="metric-open" class="metric-value">—</div>
+          <div class="metric-label mt-2">From review records, when available</div>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 xl:grid-cols-3 gap-5 mb-8">
+        <div class="panel xl:col-span-2">
+          <div class="p-5 border-b border-[#E7E5EE]">
+            <h2 class="font-semibold">Recurring Issues</h2>
+            <p class="text-xs muted mt-1">Rules ranked by number of findings in the selected period.</p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th>Issue / Rule</th><th>Category</th><th>Occurrences</th><th>Severity</th>
+              </tr></thead>
+              <tbody id="issues-body"><tr><td colspan="4" class="empty">Loading findings…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="p-5 border-b border-[#E7E5EE]">
+            <h2 class="font-semibold">Finding categories</h2>
+            <p class="text-xs muted mt-1">Distribution based on actual findings.</p>
+          </div>
+          <div id="category-summary" class="p-5 space-y-5">
+            <div class="empty">Waiting for check data…</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="p-5 border-b border-[#E7E5EE] flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="font-semibold">Recent Activity</h2>
+            <p class="text-xs muted mt-1">Checks, review decisions, and knowledge updates from available workspace endpoints.</p>
+          </div>
+          <span id="activity-count" class="pill neutral">0 records</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Action</th><th>Related item</th><th>Reviewer / Source</th><th>Date</th><th>Outcome</th>
+            </tr></thead>
+            <tbody id="activity-body"><tr><td colspan="5" class="empty">Loading activity…</td></tr></tbody>
+          </table>
+        </div>
+        <div id="activity-footer" class="px-5 py-4 border-t border-[#E7E5EE] text-xs muted">Activity is limited to the records returned by the configured APIs.</div>
+      </section>
+
+      <section id="source-errors" class="hidden mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4">
+        <h3 class="font-semibold text-sm text-amber-900">Some data sources could not be loaded</h3>
+        <p class="text-xs text-amber-800 mt-1">Insights for unavailable modules are not included. Check the endpoint configuration below and your server routes.</p>
+        <ul id="source-error-list" class="text-xs text-amber-900 mt-2 list-disc pl-5 space-y-1"></ul>
+      </section>
+    </main>
+  </div>
+
+<script>
+/*
+ * API CONFIGURATION
+ * Checks: confirmed in the existing project context.
+ * Change the other paths to match the routes in your backend.
+ *
+ * The frontend accepts either an array or common wrapper keys such as
+ * { checks: [...] }, { items: [...] }, { results: [...] }, or { data: [...] }.
+ */
+const API = {
+  checks: "/api/checks?limit=200",
+  reviews: "/api/reviews?limit=200",
+  knowledge: "/api/knowledge?limit=200",
+  activity: "/api/activity?limit=200"
+};
+
+const state = {
+  checks: [],
+  reviews: [],
+  knowledge: [],
+  activity: [],
+  errors: [],
+  search: "",
+  days: "30",
+  type: "all"
+};
+
+const $ = id => document.getElementById(id);
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
+
+function first(obj, keys, fallback = "") {
+  for (const key of keys) {
+    const value = obj?.[key];
+    if (value !== undefined && value !== null && value !== "") return value;
+  }
+  return fallback;
+}
+
+function asArray(payload) {
+  if (Array.isArray(payload)) return payload;
+  for (const key of ["checks", "reviews", "knowledge", "activity", "items", "results", "records", "data"]) {
+    if (Array.isArray(payload?.[key])) return payload[key];
+  }
+  return [];
+}
+
+async function fetchRecords(key, url, required = false) {
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { "Accept": "application/json" },
+      credentials: "same-origin"
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const payload = await response.json();
+    return asArray(payload);
+  } catch (error) {
+    const message = `${key}: ${url} — ${error.message}`;
+    state.errors.push(message);
+    if (required) console.error("Required insights source failed:", message);
+    else console.warn("Optional insights source unavailable:", message);
+    return [];
+  }
+}
+
+function dateOf(record) {
+  const raw = first(record, [
+    "created_at", "createdAt", "checked_at", "checkedAt",
+    "updated_at", "updatedAt", "timestamp", "reviewed_at",
+    "reviewedAt", "date"
+  ]);
+  if (!raw) return null;
+  const date = new Date(raw);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function withinPeriod(record) {
+  if (state.days === "all") return true;
+  const date = dateOf(record);
+  if (!date) return false;
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - Number(state.days));
+  return date >= cutoff && date <= new Date();
+}
+
+function normaliseSeverity(value) {
+  const s = String(value ?? "").toLowerCase();
+  if (s.includes("critical") || s.includes("high")) return "High";
+  if (s.includes("medium") || s.includes("moderate")) return "Medium";
+  if (s.includes("low") || s.includes("minor")) return "Low";
+  return value ? String(value) : "Unspecified";
+}
+
+function severityClass(value) {
+  const s = normaliseSeverity(value).toLowerCase();
+  if (s === "high") return "high";
+  if (s === "medium") return "medium";
+  if (s === "low") return "low";
+  return "neutral";
+}
+
+function findingsOf(check) {
+  const candidate = first(check, [
+    "findings", "issues", "violations", "results", "detected_issues"
+  ], null);
+  if (Array.isArray(candidate)) return candidate;
+
+  // Some APIs return a single result object instead of a findings array.
+  if (candidate && typeof candidate === "object") {
+    for (const key of ["items", "findings", "issues", "violations"]) {
+      if (Array.isArray(candidate[key])) return candidate[key];
+    }
+  }
+  return [];
+}
+
+function checkTitle(check) {
+  return String(first(check, [
+    "asset_name", "assetName", "content_title", "contentTitle",
+    "filename", "file_name", "title", "name", "url"
+  ], `Check ${first(check, ["id", "_id"], "record")}`));
+}
+
+function findingTitle(finding) {
+  return String(first(finding, [
+    "rule_name", "ruleName", "rule_title", "ruleTitle",
+    "title", "name", "message", "description", "rule_id", "ruleId"
+  ], "Unspecified finding"));
+}
+
+function findingCategory(finding) {
+  return String(first(finding, [
+    "category", "rule_category", "ruleCategory", "type", "domain"
+  ], "Uncategorised"));
+}
+
+function findingSeverity(finding) {
+  return normaliseSeverity(first(finding, [
+    "severity", "risk_level", "riskLevel", "priority"
+  ], ""));
+}
+
+function allFindings(checks) {
+  const output = [];
+  for (const check of checks) {
+    const findings = findingsOf(check);
+    findings.forEach(finding => {
+      output.push({
+        ...finding,
+        _parentTitle: checkTitle(check),
+        _parentDate: dateOf(check),
+        _parentId: first(check, ["id", "_id"], "")
+      });
+    });
+  }
+  return output;
+}
+
+function normaliseStatus(record) {
+  return String(first(record, [
+    "status", "review_status", "reviewStatus", "decision", "outcome"
+  ], "Recorded")).replace(/[_-]/g, " ");
+}
+
+function matchesSearch(record, query) {
+  if (!query) return true;
+  return JSON.stringify(record).toLowerCase().includes(query);
+}
+
+function filteredChecks() {
+  return state.checks.filter(check =>
+    withinPeriod(check) && matchesSearch(check, state.search)
+  );
+}
+
+function filteredFindings() {
+  return allFindings(filteredChecks()).filter(finding =>
+    matchesSearch(finding, state.search)
+  );
+}
+
+function normaliseActivity(records, type, sourceLabel) {
+  return records.map(record => ({
+    raw: record,
+    type,
+    title: String(first(record, [
+      "asset_name", "assetName", "content_title", "contentTitle",
+      "rule_name", "ruleName", "title", "name", "action", "event"
+    ], sourceLabel)),
+    actor: String(first(record, [
+      "reviewer_name", "reviewerName", "reviewer", "user_name",
+      "userName", "actor_name", "actor", "created_by", "createdBy"
+    ], sourceLabel)),
+    outcome: normaliseStatus(record),
+    date: dateOf(record),
+    id: first(record, ["id", "_id"], "")
+  }));
+}
+
+function deriveActivity() {
+  const rows = [
+    ...normaliseActivity(state.activity, "activity", "Activity log"),
+    ...normaliseActivity(state.reviews, "review", "Review queue"),
+    ...normaliseActivity(state.knowledge, "knowledge", "Brand knowledge"),
+    ...state.checks.map(check => ({
+      raw: check,
+      type: "check",
+      title: checkTitle(check),
+      actor: String(first(check, ["created_by", "createdBy", "user_name", "userName"], "Content Checker")),
+      outcome: normaliseStatus(check),
+      date: dateOf(check),
+      id: first(check, ["id", "_id"], "")
+    }))
+  ];
+
+  // Prefer dedicated activity history records when they already represent
+  // checks/reviews/knowledge events; don't blindly deduplicate by title.
+  return rows.filter(row => row.date)
+    .sort((a, b) => b.date - a.date);
+}
+
+function isOpenReview(review) {
+  const status = normaliseStatus(review).toLowerCase();
+  return !/(resolved|closed|accepted|approved|rejected|complete|completed|dismissed)/.test(status);
+}
+
+function formatDate(date) {
+  if (!date) return "Date unavailable";
+  return new Intl.DateTimeFormat(undefined, {
+    year: "numeric", month: "short", day: "2-digit",
+    hour: "2-digit", minute: "2-digit"
+  }).format(date);
+}
+
+function renderMetrics() {
+  const checks = filteredChecks();
+  const findings = filteredFindings();
+  $("metric-checks").textContent = checks.length.toLocaleString();
+  $("metric-findings").textContent = findings.length.toLocaleString();
+  $("metric-high").textContent = findings.filter(f => findingSeverity(f) === "High").length.toLocaleString();
+
+  const openReviews = state.reviews.filter(r => withinPeriod(r) && isOpenReview(r));
+  $("metric-open").textContent = state.errors.some(e => e.startsWith("reviews:"))
+    ? "—" : openReviews.length.toLocaleString();
+}
+
+function renderIssues() {
+  const findings = filteredFindings();
+  const groups = new Map();
+
+  findings.forEach(finding => {
+    const title = findingTitle(finding);
+    const category = findingCategory(finding);
+    const key = `${title}|||${category}`;
+    if (!groups.has(key)) {
+      groups.set(key, { title, category, count: 0, severity: "Unspecified", severities: [] });
+    }
+    const group = groups.get(key);
+    group.count++;
+    group.severities.push(findingSeverity(finding));
+  });
+
+  const rows = [...groups.values()].map(group => {
+    const priority = { High: 3, Medium: 2, Low: 1, Unspecified: 0 };
+    group.severity = group.severities.reduce((best, current) =>
+      (priority[current] || 0) > (priority[best] || 0) ? current : best, "Unspecified");
+    return group;
+  }).sort((a, b) => b.count - a.count);
+
+  $("issues-body").innerHTML = rows.length ? rows.map(row => `
+    <tr>
+      <td>
+        <div class="font-medium">${escapeHtml(row.title)}</div>
+      </td>
+      <td><span class="pill neutral">${escapeHtml(row.category)}</span></td>
+      <td><span class="mono font-semibold">${row.count}</span></td>
+      <td><span class="pill ${severityClass(row.severity)}">${escapeHtml(row.severity)}</span></td>
+    </tr>`).join("") :
+    `<tr><td colspan="4" class="empty">${
+      state.errors.some(e => e.startsWith("checks:"))
+        ? "Findings could not be loaded. Check the API endpoint and response schema."
+        : "No findings found for this period and search."
+    }</td></tr>`;
+}
+
+function renderCategories() {
+  const findings = filteredFindings();
+  const groups = new Map();
+  findings.forEach(finding => {
+    const category = findingCategory(finding);
+    groups.set(category, (groups.get(category) || 0) + 1);
+  });
+
+  const sorted = [...groups.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
+  const total = findings.length;
+
+  $("category-summary").innerHTML = sorted.length ? sorted.map(([name, count]) => `
+    <div>
+      <div class="flex items-center justify-between gap-3 mb-2">
+        <span class="text-xs font-medium">${escapeHtml(name)}</span>
+        <span class="text-xs muted mono">${count} · ${total ? Math.round(count / total * 100) : 0}%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:${total ? count / total * 100 : 0}%"></div></div>
+    </div>`).join("") :
+    `<div class="empty">${state.errors.some(e => e.startsWith("checks:"))
+      ? "Category distribution unavailable until checks load."
+      : "No categorised findings in the selected period."}</div>`;
+}
+
+function filteredActivity() {
+  return deriveActivity().filter(row => {
+    const raw = row.raw;
+    if (!withinPeriod(raw) && !withinPeriod({ created_at: row.date?.toISOString() })) return false;
+    if (state.type !== "all" && row.type !== state.type) return false;
+    if (!matchesSearch(raw, state.search) &&
+        !`${row.title} ${row.actor} ${row.outcome}`.toLowerCase().includes(state.search)) return false;
+    return true;
+  });
+}
+
+function activityLabel(type) {
+  return ({
+    review: "Review decision",
+    knowledge: "Knowledge update",
+    check: "Check completed",
+    activity: "Activity event"
+  })[type] || "Activity";
+}
+
+function renderActivity() {
+  const rows = filteredActivity();
+  $("activity-count").textContent = `${rows.length} records`;
+
+  $("activity-body").innerHTML = rows.length ? rows.slice(0, 100).map(row => `
+    <tr>
+      <td><span class="pill neutral">${escapeHtml(activityLabel(row.type))}</span></td>
+      <td><div class="font-medium">${escapeHtml(row.title)}</div></td>
+      <td>${escapeHtml(row.actor)}</td>
+      <td class="mono text-xs whitespace-nowrap">${escapeHtml(formatDate(row.date))}</td>
+      <td><span class="pill ${/resolved|accepted|approved|complete/i.test(row.outcome) ? "success" : "neutral"}">${escapeHtml(row.outcome)}</span></td>
+    </tr>`).join("") :
+    `<tr><td colspan="5" class="empty">${
+      state.errors.length
+        ? "No timestamped activity records were returned by the configured sources."
+        : "No activity found for this period and filter."
+    }</td></tr>`;
+
+  $("activity-footer").textContent = rows.length > 100
+    ? `Showing the latest 100 of ${rows.length} matching records. CSV export includes all matching records.`
+    : `${rows.length} matching records. Activity is based on returned workspace records.`;
+}
+
+function renderErrors() {
+  const box = $("source-errors");
+  const list = $("source-error-list");
+  if (!state.errors.length) {
+    box.classList.add("hidden");
+    return;
+  }
+  box.classList.remove("hidden");
+  list.innerHTML = state.errors.map(error => `<li>${escapeHtml(error)}</li>`).join("");
+}
+
+function renderStatus() {
+  const status = $("data-status");
+  const loaded = [
+    `Checks: ${state.checks.length}`,
+    `Reviews: ${state.reviews.length}`,
+    `Knowledge: ${state.knowledge.length}`,
+    `Activity: ${state.activity.length}`
+  ];
+  status.textContent = state.errors.length
+    ? `Loaded with ${state.errors.length} source issue(s). ${loaded.join(" · ")}`
+    : `Workspace data loaded. ${loaded.join(" · ")}`;
+  status.classList.toggle("error", state.errors.length > 0);
+}
+
+function render() {
+  renderMetrics();
+  renderIssues();
+  renderCategories();
+  renderActivity();
+  renderErrors();
+  renderStatus();
+}
+
+async function loadAll() {
+  $("refresh-btn").disabled = true;
+  $("refresh-btn").textContent = "Loading…";
+  state.errors = [];
+
+  const [checks, reviews, knowledge, activity] = await Promise.all([
+    fetchRecords("checks", API.checks, true),
+    fetchRecords("reviews", API.reviews),
+    fetchRecords("knowledge", API.knowledge),
+    fetchRecords("activity", API.activity)
+  ]);
+
+  state.checks = checks;
+  state.reviews = reviews;
+  state.knowledge = knowledge;
+  state.activity = activity;
+
+  render();
+  $("refresh-btn").disabled = false;
+  $("refresh-btn").innerHTML = '<span class="material-symbols-outlined text-[17px]">refresh</span>Refresh';
+}
+
+function csvCell(value) {
+  const text = String(value ?? "");
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+function exportCsv() {
+  const rows = filteredActivity();
+  const headers = ["Action Type", "Related Item", "Reviewer / Source", "Date", "Outcome", "Record ID"];
+  const csv = [
+    headers.map(csvCell).join(","),
+    ...rows.map(row => [
+      activityLabel(row.type),
+      row.title,
+      row.actor,
+      row.date ? row.date.toISOString() : "",
+      row.outcome,
+      row.id
+    ].map(csvCell).join(","))
+  ].join("\r\n");
+
+  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `normcheck-insights-${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+$("search-input").addEventListener("input", event => {
+  state.search = event.target.value.trim().toLowerCase();
+  render();
+});
+
+$("date-range").addEventListener("change", event => {
+  state.days = event.target.value;
+  render();
+});
+
+$("activity-type").addEventListener("change", event => {
+  state.type = event.target.value;
+  renderActivity();
+});
+
+$("refresh-btn").addEventListener("click", loadAll);
+$("export-btn").addEventListener("click", exportCsv);
+
+loadAll();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

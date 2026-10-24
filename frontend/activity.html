@@ -1,0 +1,993 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Activity | NormCheck AI</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: "#eef2ff",
+              100: "#e0e7ff",
+              500: "#6366f1",
+              600: "#4f46e5",
+              700: "#4338ca"
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      color: #64748b;
+      transition: 0.2s;
+    }
+
+    .nav-link:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .nav-link.active {
+      background: #eef2ff;
+      color: #4338ca;
+      font-weight: 600;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .status-confirmed {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .status-potential {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-uncertain {
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+
+    .status-resolved {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .severity-critical {
+      color: #991b1b;
+      background: #fee2e2;
+    }
+
+    .severity-high {
+      color: #c2410c;
+      background: #ffedd5;
+    }
+
+    .severity-medium {
+      color: #92400e;
+      background: #fef3c7;
+    }
+
+    .severity-low {
+      color: #166534;
+      background: #dcfce7;
+    }
+
+    .severity-badge {
+      display: inline-flex;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="hidden w-64 shrink-0 border-r border-slate-200 bg-white lg:flex lg:flex-col">
+      <div class="flex h-20 items-center gap-3 border-b border-slate-100 px-6">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-white">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3 20 7v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4Z" />
+            <path d="m8.5 12 2.2 2.2 4.8-5" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-slate-900">NormCheck AI</h1>
+          <p class="text-xs text-slate-500">Brand compliance platform</p>
+        </div>
+      </div>
+
+      <nav class="flex-1 space-y-1 px-4 py-6">
+        <p class="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          Workspace
+        </p>
+
+        <a href="index.html" class="nav-link">
+          <span>◫</span><span>Content Checker</span>
+        </a>
+
+        <a href="review.html" class="nav-link">
+          <span>▤</span><span>Review Queue</span>
+        </a>
+
+        <a href="activity.html" class="nav-link active">
+          <span>◷</span><span>Activity</span>
+        </a>
+
+        <a href="knowledge.html" class="nav-link">
+          <span>▧</span><span>Brand Knowledge</span>
+        </a>
+      </nav>
+
+      <div class="border-t border-slate-100 p-4">
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-sm font-semibold text-slate-800">NormCheck AI</p>
+          <p class="mt-1 text-xs leading-5 text-slate-500">
+            Review content, track findings, and maintain brand consistency.
+          </p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="min-w-0 flex-1">
+      <header
+        class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-white px-5 py-5 sm:px-8">
+        <div>
+          <div class="flex items-center gap-2 text-sm text-slate-500">
+            <span>Workspace</span>
+            <span>/</span>
+            <span class="text-slate-800">Activity</span>
+          </div>
+          <h2 class="mt-2 text-2xl font-bold tracking-tight text-slate-900">
+            Activity History
+          </h2>
+          <p class="mt-1 text-sm text-slate-500">
+            Browse past checks and track the status of compliance findings.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button id="refresh-btn"
+            class="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+            ↻ Refresh
+          </button>
+          <a href="index.html"
+            class="rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700">
+            + New Check
+          </a>
+        </div>
+      </header>
+
+      <div class="mx-auto max-w-7xl space-y-6 p-5 sm:p-8">
+
+        <!-- Summary cards -->
+        <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div class="rounded-2xl border border-slate-200 bg-white p-5">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-medium text-slate-500">Checks Loaded</p>
+              <span class="rounded-lg bg-indigo-50 px-3 py-2 text-indigo-600">▤</span>
+            </div>
+            <p id="stat-checks" class="mt-4 text-3xl font-bold text-slate-900">—</p>
+            <p class="mt-1 text-xs text-slate-500">Checks in the current history</p>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-5">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-medium text-slate-500">Total Findings</p>
+              <span class="rounded-lg bg-orange-50 px-3 py-2 text-orange-600">⚑</span>
+            </div>
+            <p id="stat-findings" class="mt-4 text-3xl font-bold text-slate-900">—</p>
+            <p class="mt-1 text-xs text-slate-500">Across loaded checks</p>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-5">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-medium text-slate-500">Open Findings</p>
+              <span class="rounded-lg bg-amber-50 px-3 py-2 text-amber-600">◷</span>
+            </div>
+            <p id="stat-open" class="mt-4 text-3xl font-bold text-slate-900">—</p>
+            <p class="mt-1 text-xs text-slate-500">Awaiting resolution</p>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-5">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-medium text-slate-500">Resolved</p>
+              <span class="rounded-lg bg-emerald-50 px-3 py-2 text-emerald-600">✓</span>
+            </div>
+            <p id="stat-resolved" class="mt-4 text-3xl font-bold text-slate-900">—</p>
+            <p class="mt-1 text-xs text-slate-500">Findings marked resolved</p>
+          </div>
+        </section>
+
+        <!-- Filters -->
+        <section class="rounded-2xl border border-slate-200 bg-white p-5">
+          <div class="flex flex-col gap-4 xl:flex-row xl:items-end">
+            <div class="flex-1">
+              <label for="search-input" class="mb-2 block text-sm font-semibold text-slate-700">
+                Search activity
+              </label>
+              <div class="relative">
+                <span class="absolute left-3 top-2.5 text-slate-400">⌕</span>
+                <input id="search-input" type="search" placeholder="Search content, findings, or explanations..."
+                  class="w-full rounded-lg border border-slate-200 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
+              </div>
+            </div>
+
+            <div class="w-full xl:w-48">
+              <label for="status-filter" class="mb-2 block text-sm font-semibold text-slate-700">
+                Finding status
+              </label>
+              <select id="status-filter"
+                class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-brand-500">
+                <option value="all">All statuses</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="potential">Potential</option>
+                <option value="uncertain">Uncertain</option>
+                <option value="resolved">Resolved</option>
+                <option value="unreviewed">Unreviewed / pending</option>
+              </select>
+            </div>
+
+            <div class="w-full xl:w-48">
+              <label for="severity-filter" class="mb-2 block text-sm font-semibold text-slate-700">
+                Severity
+              </label>
+              <select id="severity-filter"
+                class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-brand-500">
+                <option value="all">All severities</option>
+                <option value="critical">Critical</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+
+            <button id="clear-filters-btn"
+              class="rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50">
+              Clear filters
+            </button>
+          </div>
+        </section>
+
+        <!-- Activity table -->
+        <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-4">
+            <div>
+              <h3 class="font-bold text-slate-900">Check history</h3>
+              <p id="results-count" class="mt-1 text-xs text-slate-500">Loading activity…</p>
+            </div>
+            <span id="last-updated" class="text-xs text-slate-400"></span>
+          </div>
+
+          <div id="loading-state" class="px-6 py-16 text-center">
+            <div class="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-brand-600"></div>
+            <p class="mt-4 text-sm text-slate-500">Loading activity history…</p>
+          </div>
+
+          <div id="error-state" class="hidden px-6 py-12 text-center">
+            <p class="font-semibold text-red-700">Could not load activity</p>
+            <p id="error-message" class="mx-auto mt-2 max-w-xl text-sm text-slate-500"></p>
+            <button id="retry-btn"
+              class="mt-4 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700">
+              Try again
+            </button>
+          </div>
+
+          <div id="empty-state" class="hidden px-6 py-16 text-center">
+            <div
+              class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-2xl text-slate-500">
+              ◷</div>
+            <h4 class="mt-4 font-semibold text-slate-900">No activity found</h4>
+            <p id="empty-message" class="mt-2 text-sm text-slate-500">
+              Run a content check to start building your activity history.
+            </p>
+            <a href="index.html"
+              class="mt-5 inline-flex rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700">
+              Run a check
+            </a>
+          </div>
+
+          <div id="table-container" class="hidden overflow-x-auto">
+            <table class="w-full min-w-[900px] text-left">
+              <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
+                <tr>
+                  <th class="px-5 py-3 font-semibold">Content / Check</th>
+                  <th class="px-5 py-3 font-semibold">Finding</th>
+                  <th class="px-5 py-3 font-semibold">Severity</th>
+                  <th class="px-5 py-3 font-semibold">Status</th>
+                  <th class="px-5 py-3 font-semibold">Date</th>
+                  <th class="px-5 py-3 text-right font-semibold">Action</th>
+                </tr>
+              </thead>
+              <tbody id="activity-table-body" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+
+          <div id="pagination"
+            class="hidden flex-wrap items-center justify-between gap-3 border-t border-slate-100 px-5 py-4">
+            <p id="page-info" class="text-sm text-slate-500"></p>
+            <div class="flex gap-2">
+              <button id="prev-page"
+                class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium hover:bg-slate-50">
+                Previous
+              </button>
+              <button id="next-page"
+                class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium hover:bg-slate-50">
+                Next
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Finding details drawer -->
+  <div id="drawer-backdrop" class="fixed inset-0 z-40 hidden bg-slate-900/40"></div>
+
+  <aside id="details-drawer"
+    class="fixed right-0 top-0 z-50 flex h-full w-full max-w-xl translate-x-full flex-col bg-white shadow-2xl transition-transform duration-300"
+    aria-label="Finding details">
+
+    <div class="flex items-start justify-between border-b border-slate-200 px-6 py-5">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-brand-600">Activity details</p>
+        <h3 id="drawer-title" class="mt-1 text-xl font-bold text-slate-900">Finding details</h3>
+        <p id="drawer-subtitle" class="mt-1 text-sm text-slate-500"></p>
+      </div>
+      <button id="close-drawer-btn"
+        class="rounded-lg p-2 text-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+        aria-label="Close details">×</button>
+    </div>
+
+    <div id="drawer-content" class="flex-1 space-y-6 overflow-y-auto px-6 py-6"></div>
+
+    <div class="border-t border-slate-200 bg-white px-6 py-4">
+      <label for="drawer-status" class="mb-2 block text-sm font-semibold text-slate-700">
+        Update finding status
+      </label>
+      <div class="flex gap-3">
+        <select id="drawer-status"
+          class="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-brand-500">
+          <option value="confirmed">Confirmed</option>
+          <option value="potential">Potential</option>
+          <option value="uncertain">Uncertain</option>
+          <option value="resolved">Resolved</option>
+        </select>
+        <button id="save-status-btn"
+          class="rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700">
+          Save status
+        </button>
+      </div>
+      <p id="drawer-feedback" class="mt-2 text-sm"></p>
+    </div>
+  </aside>
+
+  <div id="toast"
+    class="fixed bottom-5 right-5 z-[60] hidden max-w-sm rounded-xl bg-slate-900 px-4 py-3 text-sm text-white shadow-lg">
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const API_BASE = "/api";
+      const PAGE_SIZE = 10;
+
+      const state = {
+        checks: [],
+        rows: [],
+        filteredRows: [],
+        page: 1,
+        selectedFinding: null,
+        loading: false
+      };
+
+      const $ = (selector) => document.querySelector(selector);
+
+      const elements = {
+        loading: $("#loading-state"),
+        error: $("#error-state"),
+        errorMessage: $("#error-message"),
+        empty: $("#empty-state"),
+        emptyMessage: $("#empty-message"),
+        table: $("#table-container"),
+        tbody: $("#activity-table-body"),
+        pagination: $("#pagination"),
+        resultsCount: $("#results-count"),
+        lastUpdated: $("#last-updated"),
+        search: $("#search-input"),
+        status: $("#status-filter"),
+        severity: $("#severity-filter"),
+        drawer: $("#details-drawer"),
+        backdrop: $("#drawer-backdrop"),
+        drawerTitle: $("#drawer-title"),
+        drawerSubtitle: $("#drawer-subtitle"),
+        drawerContent: $("#drawer-content"),
+        drawerStatus: $("#drawer-status"),
+        drawerFeedback: $("#drawer-feedback"),
+        saveStatus: $("#save-status-btn"),
+        toast: $("#toast")
+      };
+
+      function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, (character) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        })[character]);
+      }
+
+      function normalize(value) {
+        return String(value ?? "").trim().toLowerCase();
+      }
+
+      function displayText(value, fallback = "Not provided") {
+        const text = String(value ?? "").trim();
+        return text ? escapeHTML(text) : fallback;
+      }
+
+      function formatDate(value) {
+        if (!value) return "Date unavailable";
+
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "Date unavailable";
+
+        return date.toLocaleString(undefined, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+      }
+
+      function getStatus(finding) {
+        const status = normalize(finding?.status);
+        return ["confirmed", "potential", "uncertain", "resolved"].includes(status)
+          ? status
+          : "unreviewed";
+      }
+
+      function getStatusLabel(status) {
+        return status === "unreviewed" ? "Pending review" :
+          status.charAt(0).toUpperCase() + status.slice(1);
+      }
+
+      function getSeverityClass(severity) {
+        const normalized = normalize(severity);
+        return ["critical", "high", "medium", "low"].includes(normalized)
+          ? `severity-${normalized}`
+          : "severity-low";
+      }
+
+      function getStatusClass(status) {
+        return ["confirmed", "potential", "uncertain", "resolved"].includes(status)
+          ? `status-${status}`
+          : "status-uncertain";
+      }
+
+      function toast(message, isError = false) {
+        elements.toast.textContent = message;
+        elements.toast.className =
+          "fixed bottom-5 right-5 z-[60] max-w-sm rounded-xl px-4 py-3 text-sm text-white shadow-lg " +
+          (isError ? "bg-red-700" : "bg-slate-900");
+
+        elements.toast.classList.remove("hidden");
+
+        window.clearTimeout(toast.timer);
+        toast.timer = window.setTimeout(() => {
+          elements.toast.classList.add("hidden");
+        }, 3000);
+      }
+
+      async function requestJSON(url, options = {}) {
+        const response = await fetch(url, {
+          ...options,
+          headers: {
+            ...(options.body ? { "Content-Type": "application/json" } : {}),
+            ...(options.headers || {})
+          }
+        });
+
+        const raw = await response.text();
+        let payload = {};
+
+        if (raw) {
+          try {
+            payload = JSON.parse(raw);
+          } catch {
+            payload = { message: raw };
+          }
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            payload.message ||
+            payload.error ||
+            `Request failed with status ${response.status}`
+          );
+        }
+
+        return payload;
+      }
+
+      function extractChecks(payload) {
+        if (Array.isArray(payload)) return payload;
+
+        if (Array.isArray(payload.checks)) return payload.checks;
+        if (Array.isArray(payload.data)) return payload.data;
+        if (Array.isArray(payload.results)) return payload.results;
+
+        return [];
+      }
+
+      function flattenChecks(checks) {
+        const rows = [];
+
+        checks.forEach((check) => {
+          const findings = Array.isArray(check.findings) ? check.findings : [];
+
+          if (findings.length === 0) {
+            rows.push({
+              rowId: `check-${check._id || check.id || rows.length}`,
+              check,
+              finding: null
+            });
+            return;
+          }
+
+          findings.forEach((finding, index) => {
+            rows.push({
+              rowId: finding._id || finding.id ||
+                `${check._id || check.id || "check"}-finding-${index}`,
+              check,
+              finding
+            });
+          });
+        });
+
+        return rows;
+      }
+
+      function getCheckContent(check) {
+        return check.content ||
+          check.text ||
+          check.originalContent ||
+          check.contentText ||
+          "";
+      }
+
+      function getCheckDate(check) {
+        return check.createdAt ||
+          check.updatedAt ||
+          check.date ||
+          check.timestamp ||
+          null;
+      }
+
+      function getFindingTitle(finding) {
+        return finding?.match ||
+          finding?.label ||
+          finding?.title ||
+          "No compliance findings";
+      }
+
+      function getFindingId(finding) {
+        return finding?._id || finding?.id || null;
+      }
+
+      async function loadActivity() {
+        if (state.loading) return;
+        state.loading = true;
+
+        elements.loading.classList.remove("hidden");
+        elements.error.classList.add("hidden");
+        elements.empty.classList.add("hidden");
+        elements.table.classList.add("hidden");
+        elements.pagination.classList.add("hidden");
+        elements.resultsCount.textContent = "Loading activity…";
+
+        try {
+          const payload = await requestJSON(`${API_BASE}/checks?limit=100`);
+          state.checks = extractChecks(payload);
+          state.rows = flattenChecks(state.checks);
+          state.page = 1;
+
+          updateSummary();
+          applyFilters();
+
+          elements.lastUpdated.textContent =
+            "Updated " + new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit"
+            });
+        } catch (error) {
+          elements.loading.classList.add("hidden");
+          elements.error.classList.remove("hidden");
+          elements.errorMessage.textContent =
+            error.message || "Please check that your backend server is running.";
+          elements.resultsCount.textContent = "Unable to load activity";
+        } finally {
+          state.loading = false;
+        }
+      }
+
+      function updateSummary() {
+        const findings = state.rows
+          .map((row) => row.finding)
+          .filter(Boolean);
+
+        const resolved = findings.filter(
+          (finding) => getStatus(finding) === "resolved"
+        ).length;
+
+        const open = findings.filter(
+          (finding) => getStatus(finding) !== "resolved"
+        ).length;
+
+        $("#stat-checks").textContent = state.checks.length;
+        $("#stat-findings").textContent = findings.length;
+        $("#stat-open").textContent = open;
+        $("#stat-resolved").textContent = resolved;
+      }
+
+      function applyFilters() {
+        const query = normalize(elements.search.value);
+        const statusFilter = elements.status.value;
+        const severityFilter = elements.severity.value;
+
+        state.filteredRows = state.rows.filter(({ check, finding }) => {
+          const content = getCheckContent(check);
+          const searchable = [
+            content,
+            check.brandName,
+            check.contentType,
+            finding?.match,
+            finding?.label,
+            finding?.explanation,
+            finding?.evidence,
+            finding?.suggestion,
+            finding?.severity,
+            finding?.status
+          ].map(normalize).join(" ");
+
+          const matchesSearch = !query || searchable.includes(query);
+
+          const status = finding ? getStatus(finding) : "unreviewed";
+          const matchesStatus =
+            statusFilter === "all" ||
+            status === statusFilter ||
+            (statusFilter === "unreviewed" && status === "unreviewed");
+
+          const severity = normalize(finding?.severity || "");
+          const matchesSeverity =
+            severityFilter === "all" || severity === severityFilter;
+
+          return matchesSearch && matchesStatus && matchesSeverity;
+        });
+
+        state.page = 1;
+        renderTable();
+      }
+
+      function renderTable() {
+        elements.loading.classList.add("hidden");
+        elements.error.classList.add("hidden");
+
+        const total = state.filteredRows.length;
+        elements.resultsCount.textContent =
+          `${total} ${total === 1 ? "record" : "records"} found`;
+
+        if (total === 0) {
+          elements.table.classList.add("hidden");
+          elements.pagination.classList.add("hidden");
+          elements.empty.classList.remove("hidden");
+
+          elements.emptyMessage.textContent = state.rows.length === 0
+            ? "No checks have been recorded yet. Run a content check to see activity here."
+            : "No records match your search or filters. Try changing them.";
+
+          elements.tbody.innerHTML = "";
+          return;
+        }
+
+        elements.empty.classList.add("hidden");
+        elements.table.classList.remove("hidden");
+
+        const totalPages = Math.ceil(total / PAGE_SIZE);
+        state.page = Math.min(state.page, totalPages);
+
+        const start = (state.page - 1) * PAGE_SIZE;
+        const pageRows = state.filteredRows.slice(start, start + PAGE_SIZE);
+
+        elements.tbody.innerHTML = pageRows.map(({ rowId, check, finding }) => {
+          const content = getCheckContent(check);
+          const contentPreview = content.length > 100
+            ? content.slice(0, 100) + "…"
+            : content;
+
+          const title = finding ? getFindingTitle(finding) : "No findings";
+          const severity = finding?.severity || "—";
+          const status = finding ? getStatus(finding) : "—";
+          const date = formatDate(getCheckDate(check));
+
+          return `
+            <tr class="transition hover:bg-slate-50">
+              <td class="px-5 py-4 align-top">
+                <p class="max-w-xs line-clamp-2 text-sm font-medium text-slate-800">
+                  ${displayText(contentPreview, "Content unavailable")}
+                </p>
+                <p class="mt-1 text-xs text-slate-400">
+                  ${displayText(check.contentType, "Content check")}
+                  ${check.brandName ? " · " + escapeHTML(check.brandName) : ""}
+                </p>
+              </td>
+
+              <td class="px-5 py-4 align-top">
+                <p class="max-w-xs text-sm font-medium text-slate-800">
+                  ${displayText(title)}
+                </p>
+                ${finding?.explanation ? `
+                  <p class="mt-1 max-w-xs line-clamp-2 text-xs text-slate-500">
+                    ${escapeHTML(finding.explanation)}
+                  </p>` : ""}
+              </td>
+
+              <td class="px-5 py-4 align-top">
+                ${finding
+              ? `<span class="severity-badge ${getSeverityClass(severity)}">${escapeHTML(severity)}</span>`
+              : `<span class="text-sm text-slate-400">—</span>`}
+              </td>
+
+              <td class="px-5 py-4 align-top">
+                ${finding
+              ? `<span class="status-badge ${getStatusClass(status)}">${escapeHTML(getStatusLabel(status))}</span>`
+              : `<span class="text-sm text-slate-400">No findings</span>`}
+              </td>
+
+              <td class="whitespace-nowrap px-5 py-4 align-top text-sm text-slate-500">
+                ${escapeHTML(date)}
+              </td>
+
+              <td class="px-5 py-4 text-right align-top">
+                <button
+                  class="open-details-btn rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 hover:border-brand-300 hover:text-brand-700"
+                  data-row-id="${escapeHTML(rowId)}">
+                  View details
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join("");
+
+        elements.pagination.classList.remove("hidden");
+        elements.pagination.classList.add("flex");
+        $("#page-info").textContent =
+          `Showing ${start + 1}–${Math.min(start + PAGE_SIZE, total)} of ${total}`;
+
+        $("#prev-page").disabled = state.page <= 1;
+        $("#next-page").disabled = state.page >= totalPages;
+      }
+
+      function section(title, content) {
+        return `
+          <section>
+            <h4 class="mb-2 text-sm font-semibold text-slate-900">${title}</h4>
+            <div class="whitespace-pre-wrap break-words text-sm leading-6 text-slate-600">${content}</div>
+          </section>
+        `;
+      }
+
+      function openDetails(rowId) {
+        const row = state.rows.find((item) => String(item.rowId) === String(rowId));
+        if (!row) return;
+
+        state.selectedFinding = row;
+        const { check, finding } = row;
+        const content = getCheckContent(check);
+
+        elements.drawerTitle.textContent = finding
+          ? getFindingTitle(finding)
+          : "Check details";
+
+        elements.drawerSubtitle.textContent = formatDate(getCheckDate(check));
+
+        const findingDetails = finding
+          ? `
+            <div class="flex flex-wrap gap-2">
+              <span class="severity-badge ${getSeverityClass(finding.severity)}">
+                ${escapeHTML(finding.severity || "Unspecified")} severity
+              </span>
+              <span class="status-badge ${getStatusClass(getStatus(finding))}">
+                ${escapeHTML(getStatusLabel(getStatus(finding)))}
+              </span>
+            </div>
+
+            ${section("Finding", displayText(getFindingTitle(finding)))}
+            ${section("Explanation", displayText(finding.explanation))}
+            ${section("Evidence", displayText(finding.evidence))}
+            ${section("Suggested correction", displayText(finding.suggestion))}
+          `
+          : `
+            <div class="rounded-xl bg-emerald-50 p-4 text-sm text-emerald-800">
+              No findings were saved for this check.
+            </div>
+          `;
+
+        elements.drawerContent.innerHTML = `
+          ${section("Submitted content", displayText(content))}
+          ${section("Content type", displayText(check.contentType))}
+          ${section("Engine", displayText(check.engine))}
+          ${findingDetails}
+        `;
+
+        elements.drawerStatus.value = finding
+          ? (getStatus(finding) === "unreviewed" ? "potential" : getStatus(finding))
+          : "potential";
+
+        elements.drawerFeedback.textContent = "";
+        elements.drawerFeedback.className = "mt-2 text-sm";
+
+        const canUpdate = Boolean(finding && getFindingId(finding));
+        elements.drawerStatus.disabled = !canUpdate;
+        elements.saveStatus.disabled = !canUpdate;
+        elements.saveStatus.textContent = canUpdate ? "Save status" : "No finding to update";
+
+        elements.backdrop.classList.remove("hidden");
+        elements.drawer.classList.remove("translate-x-full");
+        document.body.classList.add("overflow-hidden");
+      }
+
+      function closeDetails() {
+        elements.drawer.classList.add("translate-x-full");
+        elements.backdrop.classList.add("hidden");
+        document.body.classList.remove("overflow-hidden");
+        state.selectedFinding = null;
+      }
+
+      async function saveFindingStatus() {
+        const row = state.selectedFinding;
+        const finding = row?.finding;
+        const findingId = getFindingId(finding);
+
+        if (!findingId) {
+          toast("This record has no saved finding to update.", true);
+          return;
+        }
+
+        const newStatus = elements.drawerStatus.value;
+        elements.saveStatus.disabled = true;
+        elements.saveStatus.textContent = "Saving…";
+        elements.drawerFeedback.textContent = "";
+
+        try {
+          const payload = await requestJSON(
+            `${API_BASE}/findings/${encodeURIComponent(findingId)}/status`,
+            {
+              method: "PATCH",
+              body: JSON.stringify({ status: newStatus })
+            }
+          );
+
+          // Reflect the saved status in the client-side activity data.
+          finding.status = payload.finding?.status ||
+            payload.status ||
+            newStatus;
+
+          updateSummary();
+          applyFilters();
+          openDetails(row.rowId);
+
+          elements.drawerFeedback.textContent = "Status updated successfully.";
+          elements.drawerFeedback.className = "mt-2 text-sm text-emerald-700";
+          toast("Finding status updated.");
+        } catch (error) {
+          elements.drawerFeedback.textContent =
+            error.message || "Could not update the finding status.";
+          elements.drawerFeedback.className = "mt-2 text-sm text-red-700";
+          toast("Could not update finding status.", true);
+        } finally {
+          elements.saveStatus.disabled = false;
+          elements.saveStatus.textContent = "Save status";
+        }
+      }
+
+      $("#refresh-btn").addEventListener("click", loadActivity);
+      $("#retry-btn").addEventListener("click", loadActivity);
+
+      $("#search-input").addEventListener("input", applyFilters);
+      $("#status-filter").addEventListener("change", applyFilters);
+      $("#severity-filter").addEventListener("change", applyFilters);
+
+      $("#clear-filters-btn").addEventListener("click", () => {
+        elements.search.value = "";
+        elements.status.value = "all";
+        elements.severity.value = "all";
+        applyFilters();
+      });
+
+      $("#prev-page").addEventListener("click", () => {
+        if (state.page > 1) {
+          state.page--;
+          renderTable();
+        }
+      });
+
+      $("#next-page").addEventListener("click", () => {
+        const totalPages = Math.ceil(state.filteredRows.length / PAGE_SIZE);
+        if (state.page < totalPages) {
+          state.page++;
+          renderTable();
+        }
+      });
+
+      elements.tbody.addEventListener("click", (event) => {
+        const button = event.target.closest(".open-details-btn");
+        if (button) openDetails(button.dataset.rowId);
+      });
+
+      $("#close-drawer-btn").addEventListener("click", closeDetails);
+      elements.backdrop.addEventListener("click", closeDetails);
+      elements.saveStatus.addEventListener("click", saveFindingStatus);
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeDetails();
+      });
+
+      loadActivity();
+    })();
+  </script>
+</body>
+
+</html>
+```

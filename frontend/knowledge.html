@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NormCheck AI — Brand Knowledge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="theme.css" rel="stylesheet" />
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: #242139;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      overscroll-behavior: none;
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    .drawer-hidden {
+      visibility: hidden;
+    }
+
+    .status-message {
+      font-size: 13px;
+    }
+
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body class="bg-white antialiased min-h-screen text-[#242139]">
+  <aside class="fixed left-0 top-0 h-full w-64 bg-white border-r border-[#E7E5EE] z-40 flex flex-col justify-between">
+    <div>
+      <div class="h-16 px-6 border-b border-[#E7E5EE] flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-[#6D4AFF] flex items-center justify-center text-white">
+          <span class="material-symbols-outlined">verified</span>
+        </div>
+        <div class="font-semibold text-[17px]">NormCheck <span class="text-[#6D4AFF]">AI</span></div>
+      </div>
+
+      <nav class="px-3 py-4 flex flex-col gap-1 text-sm">
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[#645F7A] hover:bg-[#F8F7FC]" href="index.html">
+          <span class="material-symbols-outlined">dashboard</span> Overview
+        </a>
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[#645F7A] hover:bg-[#F8F7FC]"
+          href="checker.html">
+          <span class="material-symbols-outlined">fact_check</span> Content Checker
+        </a>
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[#645F7A] hover:bg-[#F8F7FC]"
+          href="review.html">
+          <span class="material-symbols-outlined">rate_review</span> Review Queue
+        </a>
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg bg-[#F5F3FF] text-[#6D4AFF] font-semibold"
+          href="knowledge.html">
+          <span class="material-symbols-outlined">menu_book</span> Brand Knowledge
+        </a>
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[#645F7A] hover:bg-[#F8F7FC]"
+          href="insights.html">
+          <span class="material-symbols-outlined">analytics</span> Insights
+        </a>
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[#645F7A] hover:bg-[#F8F7FC]"
+          href="activity.html">
+          <span class="material-symbols-outlined">history</span> Activity History
+        </a>
+      </nav>
+    </div>
+
+    <div class="p-3 border-t border-[#E7E5EE]">
+      <a class="flex items-center gap-3 px-3.5 py-2 rounded-lg text-[#645F7A] hover:bg-[#F8F7FC]"
+        href="settings.html">Settings</a>
+      <div class="mt-2 flex items-center gap-3 px-3 py-2 rounded-lg bg-[#F8F7FC] border border-[#E7E5EE]">
+        <div class="w-8 h-8 rounded-full bg-[#6D4AFF] text-white flex items-center justify-center text-xs">CL</div>
+        <div>
+          <div class="text-[13px] font-medium">Compliance Lead</div>
+          <div class="text-[11px] text-[#9894A8]">governance@acme.corp</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="pl-64 min-h-screen">
+    <header class="h-16 px-8 border-b border-[#E7E5EE] bg-white sticky top-0 z-30 flex items-center justify-between">
+      <div class="flex items-center gap-2 text-sm">
+        <span class="material-symbols-outlined text-[#645F7A]">domain</span>
+        <span class="font-medium">Acme Global Brand</span>
+      </div>
+      <a href="checker.html"
+        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#6D4AFF] hover:bg-[#5835E5] text-white text-sm font-medium">
+        <span class="material-symbols-outlined">add</span> New Content Check
+      </a>
+    </header>
+
+    <main class="px-8 py-8 max-w-[1400px] mx-auto flex flex-col gap-6">
+      <section class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-[#E7E5EE]">
+        <div>
+          <h1 class="text-3xl font-bold tracking-tight">Brand Knowledge</h1>
+          <p class="text-sm text-[#645F7A] mt-2">Manage verified facts, terminology, and governance rules used to audit
+            content.</p>
+        </div>
+        <button id="open-drawer-btn"
+          class="px-4 py-2 rounded-lg bg-[#6D4AFF] hover:bg-[#5b3ce6] text-white text-sm font-medium flex items-center gap-2">
+          <span class="material-symbols-outlined">add</span> Add Knowledge
+        </button>
+      </section>
+
+      <div class="px-4 py-3 rounded-lg bg-[#F5F3FF] border border-[#E7E5EE] flex gap-3 text-sm">
+        <span class="material-symbols-outlined text-[#6D4AFF]">info</span>
+        <p class="text-[#484556]">Active brand rules are stored in MongoDB and available through the NormCheck AI
+          brand-rules API.</p>
+      </div>
+
+      <div class="border-b border-[#E7E5EE] flex items-center gap-6 overflow-x-auto text-sm">
+        <button data-knowledge-tab="facts" aria-selected="true"
+          class="knowledge-tab selected-tab pb-3 whitespace-nowrap">Approved Facts <span data-count="facts"
+            class="ml-1 px-2 py-0.5 rounded-full bg-[#F5F3FF]">0</span></button>
+        <button data-knowledge-tab="terminology" aria-selected="false"
+          class="knowledge-tab pb-3 whitespace-nowrap">Terminology <span data-count="terminology"
+            class="ml-1 px-2 py-0.5 rounded-full bg-slate-100">0</span></button>
+        <button data-knowledge-tab="prohibited" aria-selected="false"
+          class="knowledge-tab pb-3 whitespace-nowrap">Prohibited Phrases <span data-count="prohibited"
+            class="ml-1 px-2 py-0.5 rounded-full bg-slate-100">0</span></button>
+        <button data-knowledge-tab="guidelines" aria-selected="false" class="knowledge-tab pb-3 whitespace-nowrap">Brand
+          Guidelines <span data-count="guidelines" class="ml-1 px-2 py-0.5 rounded-full bg-slate-100">0</span></button>
+      </div>
+
+      <style>
+        .knowledge-tab {
+          color: #645F7A;
+          font-weight: 500;
+        }
+
+        .knowledge-tab.selected-tab {
+          color: #6D4AFF;
+          border-bottom: 2px solid #6D4AFF;
+          font-weight: 600;
+        }
+      </style>
+
+      <div id="knowledge-message" role="status" class="status-message text-[#645F7A]"></div>
+
+      <section class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-3">
+          <input id="knowledge-search" type="search" placeholder="Search brand knowledge..."
+            class="w-full sm:w-72 px-3 py-2 border border-[#E7E5EE] rounded-lg text-sm focus:border-[#6D4AFF] focus:ring-[#6D4AFF]" />
+          <select id="status-filter" class="px-3 py-2 border border-[#E7E5EE] rounded-lg text-sm">
+            <option value="all">Status: All</option>
+            <option value="active">Status: Active</option>
+            <option value="inactive">Status: Inactive</option>
+          </select>
+          <button id="export-csv-btn" type="button"
+            class="px-3.5 py-2 border border-[#E7E5EE] rounded-lg text-sm hover:bg-[#F5F3FF] flex items-center gap-2">
+            <span class="material-symbols-outlined">download</span> Export CSV
+          </button>
+        </div>
+        <span id="result-count" class="text-xs text-[#645F7A]">Loading rules...</span>
+      </section>
+
+      <section class="bg-white border border-[#E7E5EE] rounded-xl overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border-collapse">
+            <thead>
+              <tr class="bg-[#F5F3FF] border-b border-[#E7E5EE] text-[#645F7A] text-xs uppercase tracking-wider">
+                <th class="py-3 px-4 min-w-[220px]">Fact / Rule</th>
+                <th class="py-3 px-4 min-w-[150px]">Category</th>
+                <th class="py-3 px-4 min-w-[280px]">Phrase / Approved Value</th>
+                <th class="py-3 px-4 min-w-[140px]">Last Updated</th>
+                <th class="py-3 px-4 min-w-[90px]">Status</th>
+                <th class="py-3 px-4 text-right min-w-[130px]">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="knowledge-table-body" class="divide-y divide-[#E7E5EE]">
+              <tr>
+                <td colspan="6" class="py-8 px-4 text-center text-[#645F7A]">Loading brand knowledge...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="px-4 py-3 bg-[#F8F7FC] border-t border-[#E7E5EE] text-xs text-[#645F7A] flex justify-between">
+          <span id="table-footer">Rules are loaded from the database.</span>
+          <button id="refresh-rules-btn" class="underline" type="button">Refresh</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Add / Edit Drawer -->
+  <div id="drawer-container" class="fixed inset-0 z-50 hidden">
+    <button id="drawer-backdrop" aria-label="Close drawer"
+      class="absolute inset-0 bg-[#302e45]/40 w-full h-full cursor-default"></button>
+    <section id="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="drawer-title"
+      class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col">
+      <div class="px-6 py-5 border-b border-[#E7E5EE] bg-[#F5F3FF] flex items-center justify-between">
+        <div>
+          <h2 id="drawer-title" class="text-base font-semibold">Add New Knowledge</h2>
+          <p class="text-xs text-[#645F7A] mt-1">Define a rule for brand content reviews.</p>
+        </div>
+        <button id="close-drawer-btn" type="button" aria-label="Close" class="p-1 rounded hover:bg-white">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <form id="knowledge-form" class="flex-1 overflow-y-auto p-6 flex flex-col gap-4 text-sm">
+        <input id="rule-id" type="hidden" />
+
+        <label class="flex flex-col gap-1.5">
+          <span class="text-xs font-semibold">Knowledge Type</span>
+          <select id="rule-type" required class="w-full px-3 py-2 border border-[#E7E5EE] rounded-lg">
+            <option value="approved_fact">Approved Fact</option>
+            <option value="preferred_term">Terminology / Preferred Term</option>
+            <option value="prohibited_phrase">Prohibited Phrase</option>
+            <option value="guideline">Brand Guideline</option>
+          </select>
+        </label>
+
+        <label class="flex flex-col gap-1.5">
+          <span class="text-xs font-semibold">Fact / Rule Title</span>
+          <input id="rule-name" required maxlength="200" placeholder="e.g. Standard Return Window"
+            class="w-full px-3 py-2 border border-[#E7E5EE] rounded-lg" />
+        </label>
+
+        <label class="flex flex-col gap-1.5">
+          <span class="text-xs font-semibold">Phrase / Approved Value</span>
+          <textarea id="rule-phrase" required maxlength="5000" rows="4"
+            placeholder="Enter the phrase or approved rule text..."
+            class="w-full px-3 py-2 border border-[#E7E5EE] rounded-lg font-mono text-xs"></textarea>
+        </label>
+
+        <label class="flex flex-col gap-1.5">
+          <span class="text-xs font-semibold">Severity</span>
+          <select id="rule-severity" class="w-full px-3 py-2 border border-[#E7E5EE] rounded-lg">
+            <option value="Low">Low</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="High">High</option>
+            <option value="Critical">Critical</option>
+          </select>
+        </label>
+
+        <label class="flex flex-col gap-1.5">
+          <span class="text-xs font-semibold">Explanation</span>
+          <textarea id="rule-explanation" rows="2" placeholder="Why does this rule matter?"
+            class="w-full px-3 py-2 border border-[#E7E5EE] rounded-lg"></textarea>
+        </label>
+
+        <label class="flex flex-col gap-1.5">
+          <span class="text-xs font-semibold">Suggested Correction</span>
+          <textarea id="rule-suggestion" rows="2" placeholder="What should the reviewer change?"
+            class="w-full px-3 py-2 border border-[#E7E5EE] rounded-lg"></textarea>
+        </label>
+
+        <label class="flex flex-col gap-1.5">
+          <span class="text-xs font-semibold">Source / Reference</span>
+          <input id="rule-source" placeholder="e.g. Legal Spec Sheet v2.4"
+            class="w-full px-3 py-2 border border-[#E7E5EE] rounded-lg" />
+        </label>
+
+        <label class="flex items-center justify-between p-3 rounded-lg bg-[#F8F7FC] border border-[#E7E5EE]">
+          <span>
+            <span class="block text-xs font-semibold">Active Status</span>
+            <span class="block text-[11px] text-[#645F7A]">Include this rule in active rule listings.</span>
+          </span>
+          <input id="rule-active" type="checkbox" checked class="rounded text-[#6D4AFF] focus:ring-[#6D4AFF]" />
+        </label>
+
+        <p id="form-error" class="text-sm text-red-600" role="alert"></p>
+      </form>
+
+      <div class="p-4 border-t border-[#E7E5EE] flex justify-end gap-2">
+        <button id="cancel-drawer-btn" type="button"
+          class="px-4 py-2 rounded-lg border border-[#E7E5EE] text-sm">Cancel</button>
+        <button id="save-knowledge-btn" type="submit" form="knowledge-form"
+          class="px-4 py-2 rounded-lg bg-[#6D4AFF] text-white text-sm font-medium">
+          Save Knowledge
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const API_URL = "/api/brand-rules";
+      const tableBody = document.getElementById("knowledge-table-body");
+      const searchInput = document.getElementById("knowledge-search");
+      const statusFilter = document.getElementById("status-filter");
+      const message = document.getElementById("knowledge-message");
+      const resultCount = document.getElementById("result-count");
+      const tableFooter = document.getElementById("table-footer");
+      const drawer = document.getElementById("drawer-container");
+      const form = document.getElementById("knowledge-form");
+      const formError = document.getElementById("form-error");
+      const saveButton = document.getElementById("save-knowledge-btn");
+
+      const tabs = {
+        facts: "approved_fact",
+        terminology: "preferred_term",
+        prohibited: "prohibited_phrase",
+        guidelines: "guideline"
+      };
+
+      const tabNames = {
+        facts: "Approved Facts",
+        terminology: "Terminology",
+        prohibited: "Prohibited Phrases",
+        guidelines: "Brand Guidelines"
+      };
+
+      let rules = [];
+      let activeTab = "facts";
+
+      function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, ch => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        })[ch]);
+      }
+
+      function showMessage(text, isError = false) {
+        message.textContent = text;
+        message.className = "status-message " + (isError ? "text-red-600" : "text-[#645F7A]");
+      }
+
+      function formatDate(date) {
+        if (!date) return "—";
+        const parsed = new Date(date);
+        if (Number.isNaN(parsed.getTime())) return "—";
+        return parsed.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "2-digit" });
+      }
+
+      function categoryLabel(type) {
+        return ({
+          approved_fact: "Approved Fact",
+          preferred_term: "Terminology",
+          prohibited_phrase: "Prohibited Phrase",
+          guideline: "Brand Guideline"
+        })[type] || type || "Uncategorised";
+      }
+
+      function getVisibleRules() {
+        const query = searchInput.value.trim().toLowerCase();
+        const status = statusFilter.value;
+
+        return rules.filter(rule => {
+          if (rule.type !== tabs[activeTab]) return false;
+
+          if (status === "active" && rule.active !== true) return false;
+          if (status === "inactive" && rule.active !== false) return false;
+
+          const text = [
+            rule.name, rule.phrase, rule.type, rule.severity,
+            rule.explanation, rule.suggestion, rule.source
+          ].join(" ").toLowerCase();
+
+          return text.includes(query);
+        });
+      }
+
+      function updateCounts() {
+        Object.entries(tabs).forEach(([tab, type]) => {
+          const count = rules.filter(rule => rule.type === type).length;
+          const element = document.querySelector(`[data-count="${tab}"]`);
+          if (element) element.textContent = count;
+        });
+      }
+
+      function renderTable() {
+        const visibleRules = getVisibleRules();
+        updateCounts();
+
+        if (!visibleRules.length) {
+          tableBody.innerHTML = `
+            <tr><td colspan="6" class="py-10 px-4 text-center text-sm text-[#645F7A]">
+              No ${escapeHTML(tabNames[activeTab].toLowerCase())} found.
+              <button id="empty-add-rule" class="ml-1 underline text-[#6D4AFF]" type="button">Add one</button>
+            </td></tr>`;
+          document.getElementById("empty-add-rule")?.addEventListener("click", () => openDrawer());
+        } else {
+          tableBody.innerHTML = visibleRules.map(rule => {
+            const id = escapeHTML(rule._id);
+            const active = rule.active === true;
+            const statusClass = active
+              ? "bg-[#ECFDF5] text-[#047857] border-[#A7F3D0]"
+              : "bg-gray-100 text-[#645F7A] border-[#E7E5EE]";
+
+            return `
+              <tr class="hover:bg-[#F8F7FC]">
+                <td class="py-3.5 px-4">
+                  <div class="font-semibold text-sm">${escapeHTML(rule.name)}</div>
+                  <div class="mt-1 text-xs text-[#645F7A]">${escapeHTML(rule.explanation || "No explanation provided")}</div>
+                  <div class="mt-1 text-[11px] text-[#9894A8]">${escapeHTML(rule.severity || "Medium")} severity</div>
+                </td>
+                <td class="py-3.5 px-4">
+                  <span class="inline-flex px-2.5 py-1 rounded-md text-xs font-semibold bg-[#F0EBFF] text-[#5427e6]">${escapeHTML(categoryLabel(rule.type))}</span>
+                </td>
+                <td class="py-3.5 px-4 font-mono text-xs">
+                  <div class="p-2.5 rounded-lg bg-[#F8F7FC] border border-[#E7E5EE] leading-relaxed whitespace-pre-wrap break-words">${escapeHTML(rule.phrase)}</div>
+                  ${rule.source ? `<div class="mt-2 text-[11px] text-[#645F7A] font-sans">Source: ${escapeHTML(rule.source)}</div>` : ""}
+                  ${rule.suggestion ? `<div class="mt-2 text-[11px] text-[#484556] font-sans">Suggestion: ${escapeHTML(rule.suggestion)}</div>` : ""}
+                </td>
+                <td class="py-3.5 px-4 text-xs">${escapeHTML(formatDate(rule.updatedAt || rule.createdAt))}</td>
+                <td class="py-3.5 px-4">
+                  <span class="inline-flex px-2.5 py-1 rounded-full border text-xs ${statusClass}">${active ? "Active" : "Inactive"}</span>
+                </td>
+                <td class="py-3.5 px-4 text-right">
+                  <div class="flex justify-end gap-1">
+                    <button type="button" data-action="edit" data-id="${id}" title="Edit rule" class="p-1.5 rounded hover:bg-[#F0EBFF] text-[#6D4AFF]">
+                      <span class="material-symbols-outlined text-[18px]">edit</span>
+                    </button>
+                    <button type="button" data-action="toggle" data-id="${id}" title="${active ? "Deactivate" : "Activate"} rule" class="p-1.5 rounded hover:bg-[#F0EBFF] text-[#645F7A]">
+                      <span class="material-symbols-outlined text-[18px]">${active ? "pause_circle" : "play_circle"}</span>
+                    </button>
+                    <button type="button" data-action="delete" data-id="${id}" title="Delete rule" class="p-1.5 rounded hover:bg-red-50 text-red-600">
+                      <span class="material-symbols-outlined text-[18px]">delete</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>`;
+          }).join("");
+        }
+
+        resultCount.textContent = `Showing ${visibleRules.length} of ${rules.filter(rule => rule.type === tabs[activeTab]).length} ${tabNames[activeTab].toLowerCase()}`;
+        tableFooter.textContent = `${rules.length} total rules loaded from the database.`;
+      }
+
+      async function loadRules() {
+        tableBody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-[#645F7A]">Loading brand knowledge...</td></tr>`;
+        showMessage("");
+
+        try {
+          const response = await fetch(`${API_URL}?includeInactive=true`);
+          const payload = await response.json().catch(() => ({}));
+
+          if (!response.ok || payload.success === false) {
+            throw new Error(payload.message || `Request failed (${response.status})`);
+          }
+
+          rules = Array.isArray(payload.rules) ? payload.rules : [];
+          renderTable();
+          showMessage("Brand knowledge loaded successfully.");
+        } catch (error) {
+          tableBody.innerHTML = `<tr><td colspan="6" class="py-8 px-4 text-center text-red-600">Could not load rules. Check that the backend is running and /api/brand-rules is available.</td></tr>`;
+          resultCount.textContent = "Unable to load rules";
+          showMessage(error.message || "Failed to load brand rules.", true);
+        }
+      }
+
+      function openDrawer(rule = null) {
+        form.reset();
+        formError.textContent = "";
+        document.getElementById("rule-id").value = rule?._id || "";
+        document.getElementById("drawer-title").textContent = rule ? "Edit Brand Knowledge" : "Add New Knowledge";
+        document.getElementById("rule-type").value = rule?.type || tabs[activeTab];
+        document.getElementById("rule-name").value = rule?.name || "";
+        document.getElementById("rule-phrase").value = rule?.phrase || "";
+        document.getElementById("rule-severity").value = rule?.severity || "Medium";
+        document.getElementById("rule-explanation").value = rule?.explanation || "";
+        document.getElementById("rule-suggestion").value = rule?.suggestion || "";
+        document.getElementById("rule-source").value = rule?.source || "";
+        document.getElementById("rule-active").checked = rule ? rule.active === true : true;
+        saveButton.textContent = rule ? "Save Changes" : "Save Knowledge";
+        drawer.classList.remove("hidden");
+      }
+
+      function closeDrawer() {
+        drawer.classList.add("hidden");
+        formError.textContent = "";
+      }
+
+      async function saveRule(event) {
+        event.preventDefault();
+        formError.textContent = "";
+
+        const id = document.getElementById("rule-id").value;
+        const body = {
+          name: document.getElementById("rule-name").value.trim(),
+          phrase: document.getElementById("rule-phrase").value.trim(),
+          type: document.getElementById("rule-type").value,
+          severity: document.getElementById("rule-severity").value,
+          explanation: document.getElementById("rule-explanation").value.trim(),
+          suggestion: document.getElementById("rule-suggestion").value.trim(),
+          source: document.getElementById("rule-source").value.trim(),
+          active: document.getElementById("rule-active").checked
+        };
+
+        if (!body.name || !body.phrase) {
+          formError.textContent = "Please enter both a title and a phrase.";
+          return;
+        }
+
+        saveButton.disabled = true;
+        saveButton.textContent = "Saving...";
+
+        try {
+          const response = await fetch(id ? `${API_URL}/${encodeURIComponent(id)}` : API_URL, {
+            method: id ? "PUT" : "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+          });
+
+          const payload = await response.json().catch(() => ({}));
+          if (!response.ok || !payload.success) {
+            throw new Error(payload.message || `Save failed (${response.status})`);
+          }
+
+          closeDrawer();
+          activeTab = Object.keys(tabs).find(tab => tabs[tab] === body.type) || "facts";
+          document.querySelector(`[data-knowledge-tab="${activeTab}"]`)?.click();
+          await loadRules();
+          showMessage(id ? "Rule updated successfully." : "Rule created successfully.");
+        } catch (error) {
+          formError.textContent = error.message || "Could not save this rule.";
+        } finally {
+          saveButton.disabled = false;
+          saveButton.textContent = id ? "Save Changes" : "Save Knowledge";
+        }
+      }
+
+      async function toggleRule(id) {
+        const rule = rules.find(item => item._id === id);
+        if (!rule) return;
+
+        try {
+          const response = await fetch(`${API_URL}/${encodeURIComponent(id)}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ active: !rule.active })
+          });
+          const payload = await response.json().catch(() => ({}));
+          if (!response.ok || !payload.success) throw new Error(payload.message || "Could not update rule.");
+
+          await loadRules();
+          showMessage(`Rule ${!rule.active ? "activated" : "deactivated"}.`);
+        } catch (error) {
+          showMessage(error.message, true);
+        }
+      }
+
+      async function deleteRule(id) {
+        const rule = rules.find(item => item._id === id);
+        if (!rule || !confirm(`Delete "${rule.name}" permanently? This cannot be undone.`)) return;
+
+        try {
+          const response = await fetch(`${API_URL}/${encodeURIComponent(id)}`, { method: "DELETE" });
+          const payload = await response.json().catch(() => ({}));
+          if (!response.ok || !payload.success) throw new Error(payload.message || "Could not delete rule.");
+
+          await loadRules();
+          showMessage("Rule deleted successfully.");
+        } catch (error) {
+          showMessage(error.message, true);
+        }
+      }
+
+      tableBody.addEventListener("click", event => {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+        const { action, id } = button.dataset;
+
+        if (action === "edit") {
+          const rule = rules.find(item => item._id === id);
+          if (rule) openDrawer(rule);
+        } else if (action === "toggle") {
+          toggleRule(id);
+        } else if (action === "delete") {
+          deleteRule(id);
+        }
+      });
+
+      document.querySelectorAll("[data-knowledge-tab]").forEach(tab => {
+        tab.addEventListener("click", () => {
+          activeTab = tab.dataset.knowledgeTab;
+          document.querySelectorAll("[data-knowledge-tab]").forEach(item => {
+            const selected = item === tab;
+            item.classList.toggle("selected-tab", selected);
+            item.setAttribute("aria-selected", String(selected));
+          });
+          renderTable();
+        });
+      });
+
+      searchInput.addEventListener("input", renderTable);
+      statusFilter.addEventListener("change", renderTable);
+      document.getElementById("refresh-rules-btn").addEventListener("click", loadRules);
+      document.getElementById("open-drawer-btn").addEventListener("click", () => openDrawer());
+      document.getElementById("close-drawer-btn").addEventListener("click", closeDrawer);
+      document.getElementById("cancel-drawer-btn").addEventListener("click", closeDrawer);
+      document.getElementById("drawer-backdrop").addEventListener("click", closeDrawer);
+      form.addEventListener("submit", saveRule);
+
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") closeDrawer();
+      });
+
+      document.getElementById("export-csv-btn").addEventListener("click", () => {
+        const visibleRules = getVisibleRules();
+        if (!visibleRules.length) {
+          showMessage("There are no rules in the current view to export.", true);
+          return;
+        }
+
+        const columns = ["name", "type", "phrase", "severity", "explanation", "suggestion", "source", "active", "createdAt", "updatedAt"];
+        const csvCell = value => `"${String(value ?? "").replace(/"/g, '""')}"`;
+        const csv = [
+          columns.join(","),
+          ...visibleRules.map(rule => columns.map(key => csvCell(rule[key])).join(","))
+        ].join("\r\n");
+
+        const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `normcheck-${activeTab}-rules.csv`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      loadRules();
+    });
+  </script>
+</body>
+
+</html>

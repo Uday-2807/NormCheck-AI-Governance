@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta content="web_dashboard" name="shell-type" />
+  <title>NormCheck AI — Content Checker</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface": "#fcf8ff",
+            "on-primary-fixed": "#1b0063",
+            "background": "#fcf8ff",
+            "on-tertiary-fixed-variant": "#47445e",
+            "surface-container-low": "#f6f1ff",
+            "on-secondary-container": "#006e75",
+            "tertiary": "#56526d",
+            "on-surface": "#1b192f",
+            "on-error-container": "#93000a",
+            "tertiary-fixed-dim": "#c8c3e2",
+            "on-error": "#ffffff",
+            "on-primary-fixed-variant": "#4500d8",
+            "on-background": "#1b192f",
+            "on-secondary-fixed": "#002022",
+            "secondary-fixed": "#80f4ff",
+            "primary-container": "#6d4aff",
+            "on-tertiary-container": "#f3eeff",
+            "on-primary-container": "#f4eeff",
+            "on-tertiary-fixed": "#1b1930",
+            "on-secondary": "#ffffff",
+            "outline-variant": "#c9c4d9",
+            "inverse-surface": "#302e45",
+            "primary-fixed": "#e5deff",
+            "secondary-fixed-dim": "#4fd9e5",
+            "on-primary": "#ffffff",
+            "inverse-on-surface": "#f3eeff",
+            "on-secondary-fixed-variant": "#004f55",
+            "secondary-container": "#6df2ff",
+            "tertiary-fixed": "#e5deff",
+            "surface-bright": "#fcf8ff",
+            "surface-container-highest": "#e4dffd",
+            "surface-container-high": "#eae5ff",
+            "surface-variant": "#e4dffd",
+            "inverse-primary": "#c9bfff",
+            "surface-tint": "#5d36ef",
+            "on-tertiary": "#ffffff",
+            "surface-dim": "#dbd6f5",
+            "outline": "#797588",
+            "primary": "#5427e6",
+            "tertiary-container": "#6e6a86",
+            "on-surface-variant": "#484556",
+            "secondary": "#006970",
+            "primary-fixed-dim": "#c9bfff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container": "#f0ebff",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "space-xl": "2rem",
+            "space-xxs": "0.125rem",
+            "space-2xl": "3rem",
+            "gutter-mobile": "1rem",
+            "gutter": "1.5rem",
+            "margin-mobile": "1rem",
+            "margin": "2rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "display-mobile": ["Inter"],
+            "body-md": ["Inter"],
+            "label-xs": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "headline-md": ["Inter"],
+            "display": ["Inter"],
+            "headline-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "label-sm": ["Inter"],
+            "code-sm": ["JetBrains Mono"]
+          },
+          "fontSize": {
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "display-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "label-xs": ["11px", { "lineHeight": "14px", "letterSpacing": "0.025em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "display": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.025em", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0.005em", "fontWeight": "400" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.015em", "fontWeight": "500" }],
+            "code-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0em", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @layer base {
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #FFFFFF;
+        color: #242139;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      body {
+        overscroll-behavior: none;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+  <link href="theme.css" rel="stylesheet" />
+</head>
+
+<body class="bg-white antialiased min-h-screen text-[#242139]" style="min-height:100vh">
+  <!-- SIDEBAR -->
+  <aside class="fixed left-0 top-0 h-full w-64 bg-white border-r border-[#E7E5EE] z-50 flex flex-col justify-between">
+    <div class="flex flex-col">
+      <!-- Logo -->
+      <div class="h-16 px-6 border-b border-[#E7E5EE] flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-[#6D4AFF] flex items-center justify-center text-white shadow-sm">
+          <span class="material-symbols-outlined text-[19px]">verified</span>
+        </div>
+        <div class="flex items-center gap-1.5 font-semibold text-[17px] tracking-tight text-[#242139]">
+          <span class="">NormCheck</span>
+          <span class="text-[#6D4AFF]">AI</span>
+        </div>
+      </div>
+      <!-- Main Navigation -->
+      <div class="px-3 py-4">
+        <nav class="flex flex-col gap-1" data-active-classes="bg-[#F5F3FF] text-[#6D4AFF] font-medium">
+          <!-- Overview -->
+          <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="overview" href="index.html"><span aria-hidden="true"
+              class="material-symbols-outlined text-[20px]">dashboard</span>
+            <span class="">Overview</span>
+          </a>
+          <!-- Content Checker -->
+          <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="content-checker" href="checker.html"><span aria-hidden="true"
+              class="material-symbols-outlined text-[20px]">fact_check</span>
+            <span class="">Content Checker</span>
+          </a>
+          <!-- Review Queue -->
+          <a class="flex items-center justify-between px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="review-queue" href="review.html" style="gap:12px"><span aria-hidden="true"
+              class="material-symbols-outlined text-[20px]">rate_review</span>
+            <span class="">Review Queue</span>
+            <span class="px-2 py-0.5 rounded-full bg-[#F5F3FF] text-[#6D4AFF] text-[12px] font-semibold">14</span>
+          </a>
+          <!-- Brand Knowledge -->
+          <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="brand-knowledge" href="knowledge.html"><span aria-hidden="true"
+              class="material-symbols-outlined text-[20px]">menu_book</span>
+            <span class="">Brand Knowledge</span>
+          </a>
+          <!-- Insights -->
+          <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="insights" href="insights.html"><span aria-hidden="true"
+              class="material-symbols-outlined text-[20px]">analytics</span>
+            <span class="">Insights</span>
+          </a>
+          <!-- Activity History -->
+          <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="activity-history" href="activity.html"><span aria-hidden="true"
+              class="material-symbols-outlined text-[20px]">history</span>
+            <span class="">Activity History</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+    <!-- Bottom Section: Settings & User Profile -->
+    <div class="p-3 border-t border-[#E7E5EE] flex flex-col gap-2">
+      <a class="flex items-center gap-3 px-3.5 py-2 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+        data-path="settings" href="settings.html">
+        <span class="">Settings</span>
+      </a>
+      <div class="flex items-center gap-3 px-3 py-2 rounded-[10px] bg-[#F8F7FC] border border-[#E7E5EE]">
+        <div
+          class="w-8 h-8 rounded-full bg-[#6D4AFF] text-white flex items-center justify-center font-medium text-xs shrink-0">
+          CL
+        </div>
+        <div class="flex flex-col min-w-0 flex-1">
+          <span class="text-[13px] font-medium text-[#242139] truncate">Compliance Lead</span>
+          <span class="text-[11px] text-[#9894A8] truncate">governance@acme.corp</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <!-- MAIN WRAPPER -->
+  <div class="pl-64 flex flex-col flex-1 min-h-screen bg-white">
+    <!-- TOP HEADER -->
+    <header class="h-16 px-8 border-b border-[#E7E5EE] bg-white sticky top-0 z-40 flex items-center justify-between">
+      <!-- Left: Workspace Selector -->
+      <div class="flex items-center gap-4">
+        <div
+          class="flex items-center gap-2 px-3 py-1.5 rounded-[10px] border border-[#E7E5EE] hover:border-[#645F7A]/40 cursor-pointer bg-white transition-colors text-[13px] text-[#242139]">
+          <span class="material-symbols-outlined text-[17px] text-[#645F7A]">domain</span>
+          <span class="font-medium">Acme Global Brand</span>
+          <span class="material-symbols-outlined text-[16px] text-[#9894A8]">expand_more</span>
+        </div>
+      </div>
+      <!-- Right: Notification bell + New Content Check + User profile -->
+      <div class="flex items-center gap-3">
+        <button aria-label="Notifications"
+          class="relative p-2 rounded-lg text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] transition-colors"
+          type="button">
+          <span class="material-symbols-outlined text-[20px]">notifications</span>
+          <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#6D4AFF]"></span>
+        </button>
+        <button
+          class="flex items-center gap-1.5 px-4 py-2 rounded-[10px] bg-[#6D4AFF] hover:bg-[#5835E5] text-white text-[13px] font-medium shadow-sm transition-all"
+          type="button">
+          <span class="material-symbols-outlined text-[17px]">add</span>
+          <span class="">New Content Check</span>
+        </button>
+        <div class="h-6 w-[1px] bg-[#E7E5EE] mx-1"></div>
+        <div class="flex items-center gap-2.5 pl-1 cursor-pointer">
+          <div
+            class="w-8 h-8 rounded-full bg-[#6D4AFF] text-white flex items-center justify-center font-medium text-xs shrink-0">
+            CL
+          </div>
+          <div class="hidden md:flex flex-col text-left leading-tight">
+            <span class="text-[13px] font-medium text-[#242139]">Compliance Lead</span>
+            <span class="text-[11px] text-[#9894A8]">Acme Corp</span>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 px-8 py-8 pt-16 max-w-[1400px] w-full mx-auto flex flex-col gap-8">
+      <div class="flex flex-col w-full">
+        <!-- Content Checker Workflow Container -->
+        <div class="flex flex-col w-full max-w-[1040px] mx-auto gap-8">
+          <!-- Top Step Bar & Intro Block -->
+          <section class="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2">
+            <div class="flex flex-col gap-1.5">
+              <div class="flex items-center gap-2 mb-1">
+                <span
+                  class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container text-primary font-label-xs text-label-xs uppercase tracking-wider">
+                  <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                  Asset Validation Pipeline
+                </span>
+                <span
+                  class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#E8F8FA] text-[#16B8C4] font-code-sm text-label-xs">
+                  <span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+                  Deterministic + AI
+                </span>
+              </div>
+              <h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Check your content</h1>
+              <p class="font-body-md text-body-md text-tertiary">Review marketing content against your approved brand
+                standards.</p>
+            </div>
+            <!-- 3-Step Horizontal Progress Track -->
+            <nav aria-label="Validation Steps"
+              class="flex items-center gap-2 p-1.5 bg-surface-container-low rounded-xl border border-outline-variant/40 shadow-sm shrink-0">
+              <!-- Step 1: Active -->
+              <div
+                class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-primary text-on-primary shadow-sm font-label-md text-label-md transition-all">
+                <span
+                  class="flex items-center justify-center w-5 h-5 rounded-full bg-white/20 text-on-primary text-[11px] font-bold">1</span>
+                <span class="font-medium whitespace-nowrap">Submit content</span>
+              </div>
+              <span class="material-symbols-outlined text-outline-variant text-[18px]">chevron_right</span>
+              <!-- Step 2: Upcoming -->
+              <div
+                class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-tertiary font-label-md text-label-md opacity-70">
+                <span
+                  class="flex items-center justify-center w-5 h-5 rounded-full bg-surface-container text-tertiary text-[11px] font-medium">2</span>
+                <span class="whitespace-nowrap">Analyze</span>
+              </div>
+              <span class="material-symbols-outlined text-outline-variant text-[18px]">chevron_right</span>
+              <!-- Step 3: Upcoming -->
+              <div
+                class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-tertiary font-label-md text-label-md opacity-70">
+                <span
+                  class="flex items-center justify-center w-5 h-5 rounded-full bg-surface-container text-tertiary text-[11px] font-medium">3</span>
+                <span class="whitespace-nowrap">Review findings</span>
+              </div>
+            </nav>
+          </section>
+          <!-- Main Form Architecture Card -->
+          <div
+            class="bg-surface-container-lowest rounded-xl border border-outline-variant/60 shadow-sm flex flex-col overflow-hidden">
+            <!-- Segmented Tab Header Bar -->
+            <div
+              class="px-6 py-4 bg-surface-container-low border-b border-outline-variant/50 flex flex-wrap items-center justify-between gap-4">
+              <div
+                class="flex items-center gap-1.5 bg-surface-container-lowest p-1 rounded-lg border border-outline-variant/40 shadow-xs"
+                role="tablist">
+                <button aria-selected="true"
+                  class="flex items-center gap-2 px-4 py-1.5 rounded-md text-label-md font-label-md transition-all bg-primary text-on-primary shadow-xs"
+                  id="tab-text-btn" onclick="switchTab('text')" role="tab" type="button">
+                  <span class="material-symbols-outlined text-[18px]">article</span>
+                  <span class="">Text</span>
+                </button>
+                <button aria-selected="false"
+                  class="flex items-center gap-2 px-4 py-1.5 rounded-md text-label-md font-label-md transition-all text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low"
+                  id="tab-image-btn" onclick="switchTab('image')" role="tab" type="button">
+                  <span class="material-symbols-outlined text-[18px]">image</span>
+                  <span class="">Image</span>
+                </button>
+                <button aria-selected="false"
+                  class="flex items-center gap-2 px-4 py-1.5 rounded-md text-label-md font-label-md transition-all text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low"
+                  id="tab-pdf-btn" onclick="switchTab('pdf')" role="tab" type="button">
+                  <span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+                  <span class="">PDF</span>
+                </button>
+              </div>
+              <div class="flex items-center gap-3"><button
+                  class="text-label-xs font-label-xs text-primary hover:text-on-primary-fixed-variant transition-colors flex items-center gap-1 font-medium"
+                  onclick="loadSampleText()" type="button">
+                  <span class="material-symbols-outlined text-[15px]">input</span>
+                  Load sample copy
+                </button></div>
+            </div>
+            <!-- Tab Content Area -->
+            <div class="p-6 md:p-8 flex flex-col gap-6">
+              <!-- TEXT VIEW -->
+              <div class="flex flex-col gap-3" id="text-mode-container">
+                <div
+                  class="flex items-center justify-between text-label-xs font-label-xs text-[#242139] px-0.5 font-medium">
+                  <span class="font-medium text-on-surface flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[16px] text-primary">edit_note</span>
+                    Content Draft
+                  </span>
+                  <div class="flex items-center gap-3">
+                    <button class="text-tertiary hover:text-on-surface transition-colors" onclick="clearText()"
+                      type="button">Clear text</button>
+                    <span class="">·</span>
+                    <button class="text-primary hover:underline flex items-center gap-1" onclick="pasteClipboard()"
+                      type="button">
+                      <span class="material-symbols-outlined text-[14px]">content_paste</span>
+                      Paste clipboard
+                    </button>
+                  </div>
+                </div>
+                <div
+                  class="relative rounded-xl border border-outline-variant focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all bg-surface-container-lowest">
+                  <textarea
+                    class="w-full p-4 rounded-xl resize-y min-h-[260px] font-body-lg text-body-lg text-on-surface placeholder:text-[#645F7A] border-0 focus:ring-0 focus:outline-none leading-relaxed bg-transparent"
+                    id="content-text-input" oninput="handleTextMetrics(this)"
+                    placeholder="Paste your marketing copy, product description, email, or campaign text here…"
+                    rows="10"></textarea>
+                  <!-- Bottom Counter Strip -->
+                  <div
+                    class="px-4 py-2.5 bg-surface-container-low/50 border-t border-outline-variant/30 rounded-b-xl flex items-center justify-between text-label-xs font-label-xs text-on-surface-variant">
+                    <div class="flex items-center gap-2 text-label-xs font-label-xs">
+                      <span class="font-code-sm text-code-sm text-on-surface font-medium" id="char-word-display">0
+                        characters · 0 words</span>
+                      <span class="text-outline-variant">|</span>
+                      <span class="text-on-surface-variant font-medium">Max 25,000 characters</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- IMAGE VIEW (Hidden by default) -->
+              <div class="hidden flex-col gap-4" id="image-mode-container">
+                <div
+                  class="group relative border-2 border-dashed border-outline-variant hover:border-primary/70 rounded-xl p-10 md:p-14 text-center flex flex-col items-center justify-center transition-all bg-surface-container-lowest cursor-pointer"
+                  id="dropzone" ondragleave="this.classList.remove('border-primary', 'bg-surface-container-low');"
+                  ondragover="event.preventDefault(); this.classList.add('border-primary', 'bg-surface-container-low');"
+                  ondrop="handleDrop(event)">
+                  <input accept="image/png,image/jpeg,image/webp,image/svg+xml" class="hidden" id="image-file-input"
+                    onchange="handleFileSelect(this)" type="file" />
+                  <div
+                    class="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center text-primary mb-4 group-hover:scale-105 transition-transform">
+                    <span class="material-symbols-outlined text-[30px]">cloud_upload</span>
+                  </div>
+                  <h3 class="font-headline-sm text-headline-sm text-on-surface mb-1">Upload a marketing image</h3>
+                  <p class="font-body-md text-body-md text-tertiary mb-5">Drag and drop an image here, or choose a file.
+                  </p>
+                  <button
+                    class="px-5 py-2.5 rounded-lg border border-primary/30 text-primary hover:bg-surface-container text-label-md font-label-md transition-all shadow-2xs flex items-center gap-2"
+                    onclick="document.getElementById('image-file-input').click();" type="button">
+                    <span class="material-symbols-outlined text-[18px]">photo_library</span>
+                    <span class="">Choose image</span>
+                  </button>
+                  <span class="mt-4 font-label-xs text-label-xs text-outline tracking-wide">Supports PNG, JPG, WEBP, or
+                    SVG up to 20MB</span>
+                </div>
+                <!-- Image Preview Staging Box -->
+                <div
+                  class="hidden rounded-xl border border-outline-variant/60 p-4 bg-surface-container-low items-center justify-between"
+                  id="image-preview-panel">
+                  <div class="flex items-center gap-3 min-w-0">
+                    <div
+                      class="w-12 h-12 rounded-lg bg-surface-container-high overflow-hidden shrink-0 flex items-center justify-center border border-outline-variant/40">
+                      <img class="w-full h-full object-cover"
+                        data-alt="High resolution enterprise asset banner thumbnail with crisp geometric corporate logo and minimalist lilac brand backdrop."
+                        id="preview-thumbnail"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUxHea0B8W0ndIYh_51rxPHZO-FdVUiaZqqsMuVgTurMIGntg9FmLhg-nJAd_ky6e4fw1zBSfNYFb6HMqAtIIkpx5dN_CcmfP2f6H6CsH3_tnHsaJyo8J_2o_x9JyOje6yC4ToJbZ1jlpds_uz-DDOO-Z6ks0Qf8mrR0mpNpRTCrd3nq-B9kJSAlhdwbGDIi1xfTfYognoMuooid-op_oUR970n-MGYgFPwMDgQaysL9s_REBL_U9R" />
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                      <span class="font-label-md text-label-md text-on-surface truncate font-medium"
+                        id="preview-filename">campaign_asset_hero.png</span>
+                      <span class="font-label-xs text-label-xs text-tertiary font-code-sm" id="preview-filesize">1.8 MB
+                        · 2400 × 1260 px</span>
+                    </div>
+                  </div>
+                  <button
+                    class="p-2 rounded-lg text-tertiary hover:text-error hover:bg-error-container/40 transition-colors"
+                    onclick="removeImage()" title="Remove image" type="button">
+                    <span class="material-symbols-outlined text-[20px]">delete</span>
+                  </button>
+                </div>
+              </div>
+              <!-- PDF VIEW (Hidden by default) -->
+              <div class="hidden flex-col gap-4" id="pdf-mode-container">
+                <div
+                  class="relative border-2 border-dashed border-outline-variant hover:border-primary/70 rounded-xl p-10 md:p-14 text-center flex flex-col items-center justify-center transition-all bg-surface-container-lowest"
+                  id="pdf-dropzone" ondragleave="this.classList.remove('border-primary', 'bg-surface-container-low');"
+                  ondragover="event.preventDefault(); this.classList.add('border-primary', 'bg-surface-container-low');"
+                  ondrop="handlePdfDrop(event)">
+                  <input accept="application/pdf,.pdf" class="hidden" id="pdf-file-input"
+                    onchange="handlePdfSelect(this)" type="file" />
+                  <div
+                    class="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center text-primary mb-4">
+                    <span class="material-symbols-outlined text-[30px]">picture_as_pdf</span>
+                  </div>
+                  <h3 class="font-headline-sm text-headline-sm text-on-surface mb-1">Upload a PDF document</h3>
+                  <p class="font-body-md text-body-md text-tertiary mb-5">Choose a PDF containing the content you want
+                    to check, or drag it here.</p>
+                  <button
+                    class="px-5 py-2.5 rounded-lg border border-primary/30 text-primary hover:bg-surface-container text-label-md font-label-md transition-all shadow-2xs flex items-center gap-2"
+                    onclick="document.getElementById('pdf-file-input').click();" type="button">
+                    <span class="material-symbols-outlined text-[18px]">upload_file</span>
+                    <span>Choose PDF</span>
+                  </button>
+                  <span class="mt-4 font-label-xs text-label-xs text-outline tracking-wide">PDF only · Maximum file size
+                    20 MB</span>
+                  <p class="hidden mt-3 text-sm text-error" id="pdf-upload-error" role="alert"></p>
+                </div>
+                <div
+                  class="hidden rounded-xl border border-outline-variant/60 p-4 bg-surface-container-low items-center justify-between gap-3"
+                  id="pdf-preview-panel">
+                  <div class="flex items-center gap-3 min-w-0">
+                    <div
+                      class="w-12 h-12 rounded-lg bg-surface-container-high shrink-0 flex items-center justify-center text-primary border border-outline-variant/40">
+                      <span class="material-symbols-outlined text-[26px]">picture_as_pdf</span>
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                      <span class="font-label-md text-label-md text-on-surface truncate font-medium"
+                        id="pdf-preview-filename"></span>
+                      <span class="font-label-xs text-label-xs text-tertiary" id="pdf-preview-filesize"></span>
+                    </div>
+                  </div>
+                  <button aria-label="Remove PDF"
+                    class="p-2 rounded-lg text-tertiary hover:text-error hover:bg-error-container/40 transition-colors"
+                    onclick="removePdf()" title="Remove PDF" type="button">
+                    <span class="material-symbols-outlined text-[20px]">delete</span>
+                  </button>
+                </div>
+                <div class="rounded-lg bg-surface-container-low p-4 flex items-start gap-3">
+                  <span class="material-symbols-outlined text-primary">info</span>
+                  <p class="text-sm text-on-surface-variant">Your PDF can be selected here. Actual document analysis
+                    will work once the model/backend API is connected.</p>
+                </div>
+              </div>
+              <!-- Governance Configuration Subsection -->
+              <div class="pt-6 border-t border-outline-variant/40 flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[19px] text-tertiary">tune</span>
+                    <h2 class="font-headline-sm text-headline-sm text-on-surface">Check Settings</h2>
+                  </div>
+                  <span class="font-label-xs text-label-xs text-[#645F7A] font-semibold">3 policies linked</span>
+                </div>
+                <!-- Configuration 3-Column Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <!-- Brand Guidelines Selector -->
+                  <div class="flex flex-col gap-1.5">
+                    <label
+                      class="font-label-sm text-label-sm text-on-surface font-medium flex items-center justify-between"
+                      for="brand-guideline-select">
+                      <span class="">Brand Guidelines</span>
+                      <span
+                        class="inline-flex items-center gap-1 font-label-xs text-[11px] text-[#18865B] bg-[#EAF7F0] px-1.5 py-0.2 rounded font-normal">
+                        <span class="material-symbols-outlined text-[13px]">verified</span> v3.2
+                      </span>
+                    </label>
+                    <div class="relative">
+                      <select
+                        class="w-full h-10 pl-3 pr-9 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all appearance-none cursor-pointer"
+                        id="brand-guideline-select">
+                        <option selected="" value="acme-global">Acme Global Brand (Corporate Core)</option>
+                        <option value="acme-nordics">Acme EMEA Regional Voice v2.1</option>
+                        <option value="acme-b2b">Acme Cloud &amp; Security Division</option>
+                        <option value="acme-investor">Investor Relations Regulatory Standard</option>
+                      </select>
+                      <span
+                        class="material-symbols-outlined absolute right-2.5 top-2.5 text-tertiary pointer-events-none text-[18px]">unfold_more</span>
+                    </div>
+                  </div>
+                  <!-- Content Type Selector -->
+                  <div class="flex flex-col gap-1.5">
+                    <label class="font-label-sm text-label-sm text-on-surface font-medium"
+                      for="content-type-select">Content Type</label>
+                    <div class="relative">
+                      <select
+                        class="w-full h-10 pl-3 pr-9 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all appearance-none cursor-pointer"
+                        id="content-type-select">
+                        <option selected="" value="social-ad">Social Ad (LinkedIn / Meta)</option>
+                        <option value="email">Email Newsletter / Outreach</option>
+                        <option value="product-page">Product Page / Landing Page</option>
+                        <option value="press-release">Press Release / Public Statement</option>
+                        <option value="whitepaper">Longform Asset / Whitepaper</option>
+                        <option value="other">Other Marketing Collateral</option>
+                      </select>
+                      <span
+                        class="material-symbols-outlined absolute right-2.5 top-2.5 text-tertiary pointer-events-none text-[18px]">expand_more</span>
+                    </div>
+                  </div>
+                  <!-- Campaign / Context Field -->
+                  <div class="flex flex-col gap-1.5">
+                    <label
+                      class="font-label-sm text-label-sm text-on-surface font-medium flex items-center justify-between"
+                      for="campaign-context-input">
+                      <span class="">Campaign or Context</span>
+                      <span class="font-label-xs text-[#645F7A] text-[11px] font-medium">Optional</span>
+                    </label>
+                    <input
+                      class="w-full h-10 px-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface placeholder:text-[#645F7A] font-body-md text-body-md focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
+                      id="campaign-context-input" placeholder="e.g. Q4 Global Product Launch, EMEA Regional Launch"
+                      type="text" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Action Footer Strip -->
+            <div
+              class="px-6 md:px-8 py-5 bg-surface-container-low border-t border-outline-variant/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <!-- Left: Rule Scope Note -->
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+                  <span class="material-symbols-outlined text-[18px]">policy</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="font-label-sm text-label-sm text-on-surface font-medium">Compliance Scope Ready</span>
+                  <span class="font-label-xs text-label-xs text-tertiary">Checks approved facts, terminology, tone,
+                    prohibited phrases, and relevant visual rules.</span>
+                </div>
+              </div>
+              <!-- Right: Primary Action Button -->
+              <div class="flex items-center gap-3 shrink-0 w-full sm:w-auto">
+                <button
+                  class="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-primary hover:bg-[#5835E5] text-on-primary font-label-md text-label-md font-medium shadow-sm transition-all focus:outline-none focus:ring-4 focus:ring-primary/20 active:scale-[0.99] cursor-pointer"
+                  id="run-check-btn" onclick="triggerBrandCheck()" type="button">
+                  <span class="material-symbols-outlined text-[19px]">verified</span>
+                  <span class="">Run Brand Check</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Supplementary Informational Footer: Verification Protocol Detail -->
+        </div>
+      </div>
+      <script>
+        let currentMode = 'text';
+
+        function switchTab(mode) {
+          currentMode = mode;
+          const modes = {
+            text: { button: document.getElementById('tab-text-btn'), container: document.getElementById('text-mode-container') },
+            image: { button: document.getElementById('tab-image-btn'), container: document.getElementById('image-mode-container') },
+            pdf: { button: document.getElementById('tab-pdf-btn'), container: document.getElementById('pdf-mode-container') }
+          };
+          Object.entries(modes).forEach(([key, item]) => {
+            const active = key === mode;
+            item.button.setAttribute('aria-selected', String(active));
+            item.button.className = active
+              ? "flex items-center gap-2 px-4 py-1.5 rounded-md text-label-md font-label-md transition-all bg-primary text-on-primary shadow-xs"
+              : "flex items-center gap-2 px-4 py-1.5 rounded-md text-label-md font-label-md transition-all text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low";
+            item.container.classList.toggle('hidden', !active);
+            item.container.classList.toggle('flex', active);
+          });
+        }
+
+        function handleTextMetrics(textarea) {
+          const val = textarea.value || '';
+          const charCount = val.length;
+          const words = val.trim() ? val.trim().split(/\s+/).length : 0;
+          const display = document.getElementById('char-word-display');
+          display.textContent = `${charCount.toLocaleString()} characters · ${words.toLocaleString()} words`;
+        }
+
+        function clearText() {
+          const textarea = document.getElementById('content-text-input');
+          textarea.value = '';
+          handleTextMetrics(textarea);
+        }
+
+        function pasteClipboard() {
+          navigator.clipboard?.readText().then(text => {
+            const textarea = document.getElementById('content-text-input');
+            textarea.value = text;
+            handleTextMetrics(textarea);
+          }).catch(() => {
+            alert('Clipboard access not permitted. Please use Cmd+V / Ctrl+V directly.');
+          });
+        }
+
+        function loadSampleText() {
+          switchTab('text');
+          const sample = "Introducing Acme QuantumSync 4.0: The world's only 100% foolproof cloud infrastructure platform that guarantees zero downtime forever. Built with hyper-accelerated intelligence, our revolutionary architecture eliminates 100% of human error. Join over 50,000 top enterprise leaders who trust Acme unconditionally.";
+          const textarea = document.getElementById('content-text-input');
+          textarea.value = sample;
+          handleTextMetrics(textarea);
+        }
+
+        function handleFileSelect(input) {
+          if (input.files && input.files[0]) {
+            showFilePreview(input.files[0]);
+          }
+        }
+
+        function handleDrop(e) {
+          e.preventDefault();
+          const dropzone = document.getElementById('dropzone');
+          dropzone.classList.remove('border-primary', 'bg-surface-container-low');
+          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            showFilePreview(e.dataTransfer.files[0]);
+          }
+        }
+
+        function showFilePreview(file) {
+          const panel = document.getElementById('image-preview-panel');
+          const nameEl = document.getElementById('preview-filename');
+          const sizeEl = document.getElementById('preview-filesize');
+
+          nameEl.textContent = file.name;
+          const sizeKb = (file.size / 1024).toFixed(1);
+          sizeEl.textContent = `${sizeKb} KB · Ready for validation`;
+          panel.classList.remove('hidden');
+          panel.classList.add('flex');
+        }
+
+        function removeImage() {
+          const panel = document.getElementById('image-preview-panel');
+          const input = document.getElementById('image-file-input');
+          input.value = '';
+          panel.classList.add('hidden');
+          panel.classList.remove('flex');
+        }
+
+        function handlePdfSelect(input) {
+          const file = input.files && input.files[0];
+          if (file) showPdfPreview(file);
+        }
+
+        function handlePdfDrop(event) {
+          event.preventDefault();
+          const dropzone = document.getElementById('pdf-dropzone');
+          dropzone.classList.remove('border-primary', 'bg-surface-container-low');
+          const file = event.dataTransfer.files && event.dataTransfer.files[0];
+          if (file) showPdfPreview(file);
+        }
+
+        function showPdfPreview(file) {
+          const error = document.getElementById('pdf-upload-error');
+          error.textContent = '';
+          error.classList.add('hidden');
+          const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+          if (!isPdf) {
+            error.textContent = 'Please choose a PDF file.';
+            error.classList.remove('hidden');
+            document.getElementById('pdf-file-input').value = '';
+            return;
+          }
+          if (file.size > 20 * 1024 * 1024) {
+            error.textContent = 'This PDF is larger than 20 MB. Please choose a smaller file.';
+            error.classList.remove('hidden');
+            document.getElementById('pdf-file-input').value = '';
+            return;
+          }
+          document.getElementById('pdf-preview-filename').textContent = file.name;
+          document.getElementById('pdf-preview-filesize').textContent = `${(file.size / (1024 * 1024)).toFixed(2)} MB · PDF selected`;
+          const panel = document.getElementById('pdf-preview-panel');
+          panel.classList.remove('hidden');
+          panel.classList.add('flex');
+        }
+
+        function removePdf() {
+          document.getElementById('pdf-file-input').value = '';
+          const panel = document.getElementById('pdf-preview-panel');
+          panel.classList.add('hidden');
+          panel.classList.remove('flex');
+          const error = document.getElementById('pdf-upload-error');
+          error.textContent = '';
+          error.classList.add('hidden');
+        }
+
+        function triggerBrandCheck() {
+          if (currentMode === 'pdf') {
+            const selectedPdf = document.getElementById('pdf-file-input').files[0];
+            if (!selectedPdf) {
+              const error = document.getElementById('pdf-upload-error');
+              error.textContent = 'Choose a PDF before continuing.';
+              error.classList.remove('hidden');
+              return;
+            }
+            alert('PDF selected successfully. To analyze its contents, the model/backend API needs to be connected.');
+            return;
+          }
+          const btn = document.getElementById('run-check-btn');
+          const originalText = btn.innerHTML;
+          btn.innerHTML = `<span class="material-symbols-outlined text-[19px] animate-spin">progress_activity</span><span>Initiating scan…</span>`;
+          btn.disabled = true;
+
+          setTimeout(() => {
+            btn.innerHTML = `<span class="material-symbols-outlined text-[19px]">check</span><span>Analysis Queued</span>`;
+            setTimeout(() => {
+              btn.innerHTML = originalText;
+              btn.disabled = false;
+            }, 1400);
+          }, 900);
+        }
+      </script>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+
+</html>

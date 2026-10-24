@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta content="web_dashboard" name="shell-type" />
+  <title>NormCheck AI — Review Queue</title>
+
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            surface: "#fcf8ff",
+            "on-primary-fixed": "#1b0063",
+            background: "#fcf8ff",
+            "on-tertiary-fixed-variant": "#47445e",
+            "surface-container-low": "#f6f1ff",
+            "on-secondary-container": "#006e75",
+            tertiary: "#56526d",
+            "on-surface": "#1b192f",
+            "on-error-container": "#93000a",
+            "tertiary-fixed-dim": "#c8c3e2",
+            "on-error": "#ffffff",
+            "on-primary-fixed-variant": "#4500d8",
+            "on-background": "#1b192f",
+            "on-secondary-fixed": "#002022",
+            "secondary-fixed": "#80f4ff",
+            "primary-container": "#6d4aff",
+            "on-tertiary-container": "#f3eeff",
+            "on-primary-container": "#f4eeff",
+            "on-tertiary-fixed": "#1b1930",
+            "on-secondary": "#ffffff",
+            "outline-variant": "#c9c4d9",
+            "inverse-surface": "#302e45",
+            "primary-fixed": "#e5deff",
+            "secondary-fixed-dim": "#4fd9e5",
+            "on-primary": "#ffffff",
+            "inverse-on-surface": "#f3eeff",
+            "on-secondary-fixed-variant": "#004f55",
+            "secondary-container": "#6df2ff",
+            "tertiary-fixed": "#e5deff",
+            "surface-bright": "#fcf8ff",
+            "surface-container-highest": "#e4dffd",
+            "surface-container-high": "#eae5ff",
+            "surface-variant": "#e4dffd",
+            "inverse-primary": "#c9bfff",
+            "surface-tint": "#5d36ef",
+            "on-tertiary": "#ffffff",
+            "surface-dim": "#dbd6f5",
+            outline: "#797588",
+            primary: "#5427e6",
+            "tertiary-container": "#6e6a86",
+            "on-surface-variant": "#484556",
+            secondary: "#006970",
+            "primary-fixed-dim": "#c9bfff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container": "#f0ebff",
+            error: "#ba1a1a",
+            "error-container": "#ffdad6"
+          },
+          borderRadius: {
+            DEFAULT: "0.125rem",
+            lg: "0.25rem",
+            xl: "0.5rem",
+            full: "0.75rem"
+          },
+          spacing: {
+            "space-md": "1rem",
+            "space-xl": "2rem",
+            "space-xxs": "0.125rem",
+            "space-2xl": "3rem",
+            "gutter-mobile": "1rem",
+            gutter: "1.5rem",
+            "margin-mobile": "1rem",
+            margin: "2rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1.5rem"
+          },
+          fontFamily: {
+            "headline-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "display-mobile": ["Inter"],
+            "body-md": ["Inter"],
+            "label-xs": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "headline-md": ["Inter"],
+            display: ["Inter"],
+            "headline-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "label-sm": ["Inter"],
+            "code-sm": ["JetBrains Mono"]
+          },
+          fontSize: {
+            "headline-lg": ["28px", {
+              lineHeight: "36px",
+              letterSpacing: "-0.02em",
+              fontWeight: "600"
+            }],
+            "label-md": ["13px", {
+              lineHeight: "18px",
+              letterSpacing: "0.01em",
+              fontWeight: "500"
+            }],
+            "display-mobile": ["28px", {
+              lineHeight: "36px",
+              letterSpacing: "-0.02em",
+              fontWeight: "600"
+            }],
+            "body-md": ["14px", {
+              lineHeight: "20px",
+              letterSpacing: "0em",
+              fontWeight: "400"
+            }],
+            "label-xs": ["11px", {
+              lineHeight: "14px",
+              letterSpacing: "0.025em",
+              fontWeight: "600"
+            }],
+            "headline-lg-mobile": ["24px", {
+              lineHeight: "32px",
+              letterSpacing: "-0.015em",
+              fontWeight: "600"
+            }],
+            "headline-md": ["20px", {
+              lineHeight: "28px",
+              letterSpacing: "-0.015em",
+              fontWeight: "600"
+            }],
+            display: ["36px", {
+              lineHeight: "44px",
+              letterSpacing: "-0.025em",
+              fontWeight: "600"
+            }],
+            "headline-sm": ["16px", {
+              lineHeight: "24px",
+              letterSpacing: "-0.01em",
+              fontWeight: "600"
+            }],
+            "body-lg": ["16px", {
+              lineHeight: "24px",
+              letterSpacing: "0em",
+              fontWeight: "400"
+            }],
+            "body-sm": ["13px", {
+              lineHeight: "18px",
+              letterSpacing: "0.005em",
+              fontWeight: "400"
+            }],
+            "label-sm": ["12px", {
+              lineHeight: "16px",
+              letterSpacing: "0.015em",
+              fontWeight: "500"
+            }],
+            "code-sm": ["12px", {
+              lineHeight: "16px",
+              letterSpacing: "0em",
+              fontWeight: "400"
+            }]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    @layer base {
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #ffffff;
+        color: #242139;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      body {
+        overscroll-behavior: none;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+
+  <link href="theme.css" rel="stylesheet" />
+</head>
+
+<body class="bg-white antialiased min-h-screen text-[#242139]" style="min-height:100vh">
+
+  <!-- SIDEBAR -->
+  <aside class="fixed left-0 top-0 h-full w-64 bg-white border-r border-[#E7E5EE] z-50 flex flex-col justify-between">
+    <div class="flex flex-col">
+
+      <!-- Logo -->
+      <div class="h-16 px-6 border-b border-[#E7E5EE] flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-[#6D4AFF] flex items-center justify-center text-white shadow-sm">
+          <span class="material-symbols-outlined text-[19px]">verified</span>
+        </div>
+        <div class="flex items-center gap-1.5 font-semibold text-[17px] tracking-tight text-[#242139]">
+          <span>NormCheck</span>
+          <span class="text-[#6D4AFF]">AI</span>
+        </div>
+      </div>
+
+      <!-- Main Navigation -->
+      <div class="px-3 py-4">
+        <nav class="flex flex-col gap-1">
+
+          <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="overview" href="index.html">
+            <span aria-hidden="true" class="material-symbols-outlined text-[20px]">dashboard</span>
+            <span>Overview</span>
+          </a>
+
+          <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="content-checker" href="checker.html">
+            <span aria-hidden="true" class="material-symbols-outlined text-[20px]">fact_check</span>
+            <span>Content Checker</span>
+          </a>
+
+          <a class="flex items-center justify-between px-3.5 py-2.5 rounded-[10px] bg-[#F5F3FF] text-[#6D4AFF] font-medium text-[14px]"
+            data-path="review-queue" href="review.html" style="gap:12px">
+            <span class="material-symbols-outlined text-[20px]">rate_review</span>
+            <span class="flex-1">Review Queue</span>
+            <span id="sidebar-finding-count"
+              class="px-2 py-0.5 rounded-full bg-white text-[#6D4AFF] text-[12px] font-semibold">0</span>
+          </a>
+
+          <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="brand-knowledge" href="knowledge.html">
+            <span aria-hidden="true" class="material-symbols-outlined text-[20px]">menu_book</span>
+            <span>Brand Knowledge</span>
+          </a>
+
+          <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="insights" href="insights.html">
+            <span aria-hidden="true" class="material-symbols-outlined text-[20px]">analytics</span>
+            <span>Insights</span>
+          </a>
+
+          <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+            data-path="activity-history" href="activity.html">
+            <span aria-hidden="true" class="material-symbols-outlined text-[20px]">history</span>
+            <span>Activity History</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Settings and user profile -->
+    <div class="p-3 border-t border-[#E7E5EE] flex flex-col gap-2">
+      <a class="flex items-center gap-3 px-3.5 py-2 rounded-[10px] text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] font-medium text-[14px] transition-colors"
+        data-path="settings" href="settings.html">
+        <span class="material-symbols-outlined text-[20px]">settings</span>
+        <span>Settings</span>
+      </a>
+
+      <div class="flex items-center gap-3 px-3 py-2 rounded-[10px] bg-[#F8F7FC] border border-[#E7E5EE]">
+        <div
+          class="w-8 h-8 rounded-full bg-[#6D4AFF] text-white flex items-center justify-center font-medium text-xs shrink-0">
+          CL
+        </div>
+        <div class="flex flex-col min-w-0 flex-1">
+          <span class="text-[13px] font-medium text-[#242139] truncate">Compliance Lead</span>
+          <span class="text-[11px] text-[#9894A8] truncate">governance@acme.corp</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN WRAPPER -->
+  <div class="pl-64 flex flex-col flex-1 min-h-screen bg-white">
+
+    <!-- TOP HEADER -->
+    <header class="h-16 px-8 border-b border-[#E7E5EE] bg-white sticky top-0 z-40 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div
+          class="flex items-center gap-2 px-3 py-1.5 rounded-[10px] border border-[#E7E5EE] bg-white text-[13px] text-[#242139]">
+          <span class="material-symbols-outlined text-[17px] text-[#645F7A]">domain</span>
+          <span class="font-medium">Acme Global Brand</span>
+          <span class="material-symbols-outlined text-[16px] text-[#9894A8]">expand_more</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button aria-label="Notifications"
+          class="relative p-2 rounded-lg text-[#645F7A] hover:text-[#242139] hover:bg-[#F8F7FC] transition-colors"
+          type="button">
+          <span class="material-symbols-outlined text-[20px]">notifications</span>
+          <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#6D4AFF]"></span>
+        </button>
+
+        <a href="checker.html"
+          class="flex items-center gap-1.5 px-4 py-2 rounded-[10px] bg-[#6D4AFF] hover:bg-[#5835E5] text-white text-[13px] font-medium shadow-sm transition-all">
+          <span class="material-symbols-outlined text-[17px]">add</span>
+          <span>New Content Check</span>
+        </a>
+
+        <div class="h-6 w-[1px] bg-[#E7E5EE] mx-1"></div>
+
+        <div class="flex items-center gap-2.5 pl-1">
+          <div
+            class="w-8 h-8 rounded-full bg-[#6D4AFF] text-white flex items-center justify-center font-medium text-xs shrink-0">
+            CL
+          </div>
+          <div class="hidden md:flex flex-col text-left leading-tight">
+            <span class="text-[13px] font-medium text-[#242139]">Compliance Lead</span>
+            <span class="text-[11px] text-[#645F7A]">Acme Corp</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 px-8 py-8 max-w-[1400px] w-full mx-auto flex flex-col gap-8">
+
+      <div class="flex flex-col w-full">
+
+        <!-- PAGE HEADER -->
+        <header class="flex flex-col gap-4 pb-6 border-b border-[#E7E5EE]">
+          <div class="flex items-center gap-2 text-[13px] text-[#645F7A]">
+            <a class="flex items-center gap-1 hover:text-[#242139] text-[#6D4AFF] font-medium transition-colors"
+              href="checker.html">
+              <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+              Back to Content Checker
+            </a>
+            <span class="text-[#9894A8]">•</span>
+            <span>Saved findings from completed checks</span>
+          </div>
+
+          <div class="flex flex-col gap-1.5 pt-1">
+            <h1 class="text-[26px] leading-[32px] font-semibold tracking-[-0.02em] text-[#242139]">
+              Findings &amp; Review
+            </h1>
+            <p class="text-[14px] leading-[20px] text-[#645F7A]">
+              Review detected issues, examine evidence, and save a review decision.
+            </p>
+          </div>
+
+          <!-- Live summary counts -->
+          <div class="flex flex-wrap gap-x-2 gap-y-1 pt-2 text-[13px] font-medium text-[#645F7A]">
+            <span id="summary-total" class="font-semibold text-[#242139]">Loading findings...</span>
+            <span class="text-[#9894A8]">·</span>
+            <span id="summary-high" class="text-[#DC4545] font-semibold">0 high severity</span>
+            <span class="text-[#9894A8]">·</span>
+            <span id="summary-pending" class="text-[#242139]">0 awaiting review</span>
+          </div>
+        </header>
+
+        <!-- DYNAMIC TWO-COLUMN REVIEW WORKSPACE -->
+        <div id="review-workspace" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-6">
+          <div class="lg:col-span-12 rounded-xl border border-[#E7E5EE] p-6">
+            <p class="text-sm text-[#645F7A]">Loading saved findings...</p>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Keep this script; app.js loads the review queue and saves decisions. -->
+  <script src="app.js"></script>
+
+  <!-- Update the summary values from the dynamic review queue. -->
+  <script>
+    (function () {
+      const workspace = document.getElementById("review-workspace");
+      if (!workspace) return;
+
+      const observer = new MutationObserver(function () {
+        const cards = workspace.querySelectorAll("[data-select-finding]");
+        const total = cards.length;
+
+        const totalElement = document.getElementById("summary-total");
+        const highElement = document.getElementById("summary-high");
+        const pendingElement = document.getElementById("summary-pending");
+        const sidebarCount = document.getElementById("sidebar-finding-count");
+
+        if (!totalElement || !highElement || !pendingElement) return;
+
+        totalElement.textContent = total + (total === 1 ? " finding" : " findings");
+
+        let high = 0;
+        let pending = 0;
+
+        cards.forEach(function (card) {
+          const text = card.textContent || "";
+          if (/\b(High|Critical)\b/i.test(text)) high++;
+          if (!/\bResolved\b/i.test(text)) pending++;
+        });
+
+        highElement.textContent = high + " high severity";
+        pendingElement.textContent = pending + " awaiting review";
+
+        if (sidebarCount) sidebarCount.textContent = total;
+      });
+
+      observer.observe(workspace, { childList: true, subtree: true });
+    })();
+  </script>
+</body>
+
+</html>
